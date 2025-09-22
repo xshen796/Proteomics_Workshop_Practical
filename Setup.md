@@ -77,7 +77,7 @@ any issue.
 
 ## Readings
 
-Optional readings regarding the datasets we will use:
+Optional readings on the datasets we will use:
 
 Readings:
 
