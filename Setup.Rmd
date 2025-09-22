@@ -2,8 +2,14 @@ Welcome! This is the repository for the MQ-DATAMIND workshop, 'Proteomics and Me
 
 # Aim of the session
 
-We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/)
+We will use two-sample Mendelian randomisation to test causal relationship between protein abundance and schizophrenia. Through this tutorial, you will gain hands-on experience in handling and performing quality check on pQTL and other types of GWAS sumstats. You will also learn how to interpret Mendelian Randomisation findings.
 
-# Introduction to the practical session
+# Data used in this tutorial and relevant readings
 
-There are 
+We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/). Note that the complete pQTL data requires a simple access sign up. You can download your own version for your analysis following the link, or you could follow this tutorial using a local copy of pre-processed pQTL data.
+
+Readings:
+
+-  Schizophrenia GWAS: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
+
+-  Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
