@@ -69,7 +69,7 @@ The code should be able to check if you have installed the packages correctly. C
 
 ## Readings
 
-Optional readings regarding the datasets we will use:
+Optional readings on the datasets we will use:
 
 Readings:
 
