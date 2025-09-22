@@ -64,89 +64,12 @@ check_and_install_package <- function(package_name) {
 }
 
 check_and_install_package("dplyr")
-```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-    ## Package 'dplyr' is already installed and loaded.
-
-``` r
 check_and_install_package("data.table")
-```
-
-    ## data.table 1.15.4 using 32 threads (see ?getDTthreads).
-
-    ## Latest news: r-datatable.com
-
-    ## 
-    ## Attaching package: 'data.table'
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     between, first, last
-
-    ## Package 'data.table' is already installed and loaded.
-
-``` r
 check_and_install_package("readr")
-```
-
-    ## Package 'readr' is already installed and loaded.
-
-``` r
 check_and_install_package("here")
-```
-
-    ## here() starts at /gpfs/igmmfs01/eddie/GenScotDepression/users/shen/ActiveProject/Proteomics_Workshop_Practical
-
-    ## Package 'here' is already installed and loaded.
-
-``` r
 check_and_install_package("remotes")
-```
-
-    ## Package 'remotes' is already installed and loaded.
-
-``` r
 check_and_install_package("TwoSampleMR")
 ```
-
-    ## TwoSampleMR version 0.6.8
-
-    ##   [>] New authentication requirements: https://mrcieu.github.io/ieugwasr/articles/guide.html#authentication.
-
-    ##   [>] Major upgrades to our servers completed to improve service and stability.
-
-    ##   [>] We need your help to shape our emerging roadmap!
-
-    ##       Please take 2 minutes to give us feedback -
-
-    ##       https://forms.office.com/e/eSr7EFAfCG
-
-    ## 
-    ## Warning:
-    ## You are running an old version of the TwoSampleMR package.
-    ## This version:   0.6.8
-    ## Latest version: 0.6.22
-    ## Please consider updating using remotes::install_github('MRCIEU/TwoSampleMR')
-
-    ## 
-    ## Attaching package: 'TwoSampleMR'
-
-    ## The following object is masked from 'package:remotes':
-    ## 
-    ##     add_metadata
-
-    ## Package 'TwoSampleMR' is already installed and loaded.
 
 The code should be able to check if you have installed the packages
 correctly. Contact Xueyi Shen (<xueyi.shen@ed.ac.uk>) if you run into
