@@ -1,3 +1,12 @@
+---
+title: "MQ-DATAMIND ECR workshop: Proteomics and Mental Health (environment set up)"
+author: "X Shen"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  github_document
+---
+
+
 Welcome! This tutorial guides through the main steps to set up your local environment for the MQ-DATAMIND ECR workshop, 'Proteomics and Mental health'.
 
 ## Introduction
