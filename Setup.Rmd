@@ -12,21 +12,33 @@ In this page, scroll down and you will find two links for R and RStudio respecti
 
 ![alt text](image.png)
 
-## Install R packages needed for this tutorial
+## Install R packages
 
 Open RStudio, run the following commands in the console:
 
 ```{r}
-library(rmarkdown)
-library(dplyr)
-library(data.table)
-library(pbapply)
-library(readr)
-library(Hmisc)
-library(readr)
-library(here)
-library(knitr)
-library(kableExtra)
-library(TwoSampleMR)
+source('utils/misc.R')
+
+check_and_install_package("dplyr")
+check_and_install_package("data.table")
+check_and_install_package("readr")
+check_and_install_package("here")
+check_and_install_package("remotes")
+check_and_install_package("TwoSampleMR")
 ```
 
+The code should be able to check if you have installed the packages correctly. Contact Xueyi Shen (xueyi.shen@ed.ac.uk) if you run into any issue.
+
+## Readings
+
+Optional readings regarding the datasets we will use:
+
+Readings:
+
+-  Schizophrenia GWAS: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
+
+-  Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
+
+## What next
+
+Additional scripts and mock data will become available prior to the workshop. 
