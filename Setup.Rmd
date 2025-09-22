@@ -1,0 +1,9 @@
+Welcome! This is the repository for the MQ-DATAMIND workshop, 'Proteomics and Mental Health' (Practical Session II)
+
+# Aim of the session
+
+We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/)
+
+# Introduction to the practical session
+
+There are 
