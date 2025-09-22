@@ -25,7 +25,7 @@ In this page, scroll down and you will find two links for R and RStudio respecti
 
 Open RStudio, run the following commands in the console:
 
-```{r}
+```{r, warning=F,message=F}
 check_and_install_package <- function(package_name) {
   # Check if the package is already installed.
   if (!require(package_name, character.only = TRUE, quietly = TRUE)) {
