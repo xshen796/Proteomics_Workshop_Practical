@@ -8,7 +8,7 @@ check_and_install_package <- function(package_name) {
     tryCatch({
       if (package_name!='TwoSampleMR'){
         install.packages(package_name, dependencies = TRUE)
-      }elseif(package_name=='TwoSampleMR'){
+      }else if(package_name=='TwoSampleMR'){
         library(remotes)
         remotes::install_github("MRCIEU/TwoSampleMR")
       }
