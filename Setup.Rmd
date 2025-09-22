@@ -14,3 +14,19 @@ In this page, scroll down and you will find two links for R and RStudio respecti
 
 ## Install R packages needed for this tutorial
 
+Open RStudio, run the following commands in the console:
+
+```{r}
+library(rmarkdown)
+library(dplyr)
+library(data.table)
+library(pbapply)
+library(readr)
+library(Hmisc)
+library(readr)
+library(here)
+library(knitr)
+library(kableExtra)
+library(TwoSampleMR)
+```
+
