@@ -1,3 +1,11 @@
+---
+title: "MQ-DATAMIND ECR workshop: Proteomics and Mental Health (tutorial - local version)"
+author: "X Shen"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  github_document
+---
+
 Welcome! This is the repository for the MQ-DATAMIND workshop, 'Proteomics and Mental Health' (Practical Session II)
 
 # Aim of the session
@@ -10,6 +18,9 @@ We will use publicly available summary statistics from the [Psychiatric Genomic 
 
 Readings:
 
--  Schizophrenia GWAS: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
+-   Schizophrenia GWAS: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
 
--  Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
+-   Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
+
+``` R
+```
