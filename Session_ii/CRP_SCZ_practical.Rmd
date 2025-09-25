@@ -22,5 +22,6 @@ Readings:
 
 -   Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
 
-``` R
+```{r}
+
 ```
