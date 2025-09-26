@@ -1,0 +1,36 @@
+---
+title: "pQTL <-> scz"
+author: X Shen  
+date: "\n`r format(Sys.time(), '%d %B, %Y')`"
+output: github_document
+always_allow_html: true
+---
+
+```{r library,echo=F,warning=F,error=F,message=F}
+library(rmarkdown)
+library(dplyr)
+library(data.table)
+library(pbapply)
+library(readr)
+library(Hmisc)
+library(here)
+library(knitr)
+library(kableExtra)
+library(TwoSampleMR)
+
+
+knitr::opts_chunk$set(engine.opts = list(bash = "-l"))
+```
+
+## Prepare SCZ sumstats
+
+```{r, read MDD gwas sumstats}
+scz.gwas = read_tsv('data/daner_PGC_SCZ_w3_90_0518d_eur.gz')
+```
+
+```{r, rename MDD sumstats colnames}
+scz.gwas = scz.gwas %>% 
+ dplyr::select(SNP,effect_allele=A1,other_allele=A2,
+                       eaf=FRQ_U_77258,OR,se=SE,pval=P,samplesize=Neff) %>% 
+         mutate(Phenotype='SCZ') 
+```

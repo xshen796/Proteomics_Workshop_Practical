@@ -40,3 +40,4 @@ Thumbs.db
 # local tmp scripts #
 #####################
 ./tmp/*
+./data/*
