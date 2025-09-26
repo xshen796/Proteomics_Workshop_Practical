@@ -34,3 +34,43 @@ scz.gwas = scz.gwas %>%
                        eaf=FRQ_U_77258,OR,se=SE,pval=P,samplesize=Neff) %>% 
          mutate(Phenotype='SCZ') 
 ```
+
+## Analysis: pQTL -> SCZ
+
+### Format SCZ (outcome)
+
+```{r, format MDD sumstats as outcome}
+dat.scz.outcome = scz.gwas %>% 
+  format_data(.,type='outcome')
+```
+
+### Format pQTL data (exposure)
+```{r,format pQTL as exposure data and clump}
+format_pqtl_exposure <- function(f.x.dat){
+  x.dat = read_tsv(f.x.dat) %>%
+    dplyr::filter(Chrom!='chrX') %>%
+    mutate(CHR=Chrom %>% gsub('chr','',.) %>% as.numeric) %>%
+    dplyr::filter(ImpMAF>0.001) %>% 
+    select(SNP=rsids,CHR,BP,Freq,A1,A2,beta=b,se=SE,p,Symbol=Probe,N) %>% 
+    MungeSumstats::liftover(sumstats_dt = ., 
+                            ref_genome = "hg38",
+                            convert_ref_genome = "hg19",end_col='BP') %>% 
+
+    dplyr::select(SNP,effect_allele=A1,other_allele=A2,
+                       eaf=Freq,beta,se,pval=p,samplesize=N,Phenotype=Symbol) %>% 
+    .[.$SNP %in% mdd.gwas$SNP,]
+  if(sum(x.dat$pval<5e-8)>0){
+    x.dat = x.dat %>% 
+      filter(pval<5e-8) %>% 
+      .[order(.$pval,decreasing = F),] %>% 
+      format_data(.,type='exposure') %>% 
+      clump_data(.,clump_kb=1000,clump_r2=0.001) %>% 
+      .[1,]
+      return(x.dat)
+  }
+}
+
+dat.mqtl.exposure = list.files(here::here('data/deCODE_pQTL/'),full.names = T) %>% 
+  .[grep('.gz$',.)] %>%
+  as.list %>% 
+  pblapply(format_pqtl_exposure)
