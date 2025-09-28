@@ -1,0 +1,4 @@
+SeqId	Protein_short_name	Protein_full_name	Gene	UniProt	Organism	Type	Ensembl_Gene_ID
+4337_49	CRP	C-reactive protein	CRP	P02741	human	Protein	ENSG00000132693
+4673_13	IL-6	Interleukin-6	IL6	P05231	human	Protein	ENSG00000136244
+4389_2	DHH	Desert hedgehog protein N-product	DHH	O43323	human	Protein	ENSG00000139549
