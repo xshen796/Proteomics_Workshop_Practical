@@ -1,0 +1,6 @@
+--2025-09-28 16:43:43--  https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdownload.decode.is%2Ffile%2F3e462571-2a69-4591-a70c-e5f7b2456fe8
+Resolving eur02.safelinks.protection.outlook.com (eur02.safelinks.protection.outlook.com)... 52.102.99.55, 52.102.99.75, 52.102.99.89, ...
+Connecting to eur02.safelinks.protection.outlook.com (eur02.safelinks.protection.outlook.com)|52.102.99.55|:443... connected.
+HTTP request sent, awaiting response... 400 Bad Request
+2025-09-28 16:43:43 ERROR 400: Bad Request.
+

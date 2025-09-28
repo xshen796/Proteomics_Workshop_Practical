@@ -14,7 +14,7 @@ We will use two-sample Mendelian randomisation to test causal relationship betwe
 
 # Data used in this tutorial and relevant readings
 
-We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/). Note that the complete pQTL data requires a simple access sign up. You can download your own version for your analysis following the link, or you could follow this tutorial using a local copy of pre-processed pQTL data.
+We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/) (Ferkingstad, E. et al. Large-scale integration of the plasma proteome with genetics and disease). Note that the complete pQTL data requires a simple access sign up. You can download your own version for your analysis following the link, or you could follow this tutorial using a local copy of pre-processed pQTL data.
 
 Readings:
 

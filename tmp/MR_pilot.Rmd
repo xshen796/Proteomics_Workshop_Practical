@@ -17,8 +17,8 @@ library(here)
 library(knitr)
 library(kableExtra)
 library(TwoSampleMR)
-library(MungeSumstats)
-library(biomaRt)
+#library(MungeSumstats)
+#library(biomaRt)
 
 ```
 
@@ -46,7 +46,13 @@ dat.scz.outcome = scz.gwas %>%
 ```
 
 ### Format pQTL data (exposure)
+
+Download pQTL annotation file from [here](https://download.decode.is/form/2021/assocvariants.annotated.txt.gz)
+
 ```{r,format pQTL as exposure data and clump}
+annot_variant = read_tsv('data/assocvariants.annotated.txt.gz') %>%
+    dplyr::select(SNP=rsids,effect_allele=effectAllele,eaf=effectAlleleFreq)
+
 format_pqtl_exposure <- function(f.x.dat,chr,pos0,pos1){
   Symbol = f.x.dat %>% gsub('_10032022.txt.gz','',.) %>% basename 
   x.dat = read_tsv(f.x.dat) %>%
@@ -61,14 +67,15 @@ format_pqtl_exposure <- function(f.x.dat,chr,pos0,pos1){
     mutate(Phenotype=Symbol) %>%
     dplyr::select(CHR,BP,SNP,effect_allele=A1,other_allele=A2,beta,se,pval=p,samplesize=N,Phenotype) %>% 
     .[.$SNP %in% scz.gwas$SNP,] %>%
-    dplyr::filter(CHR==chr,BP>pos0-1000000,BP<pos1+1000000)
+    dplyr::filter(CHR==chr,BP>pos0-1000000,BP<pos1+1000000) %>% 
+    left_join(.,annot_variant,by=c('SNP','effect_allele'))
 
     x.dat.clumped = x.dat %>% 
       filter(pval<5e-8) %>% 
-      .[order(.$pval,decreasing = F),] %>% 
       as.data.frame %>%
       format_data(.,type='exposure') %>% 
-      clump_data(.,clump_kb=1000,clump_r2=0.001) %>% 
+      clump_data(.,clump_kb=1000,clump_r2=0.001,pop='EUR') %>%
+      arrange(pval.exposure) %>%
       .[1,]
       return(x.dat.clumped)
   
