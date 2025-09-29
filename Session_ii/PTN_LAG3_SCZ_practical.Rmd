@@ -34,7 +34,7 @@ Readings:
 
 Use the script below to clone this github repository on your local machine:
 
-```{r, eval=F, echo=T}
+```{bash, eval=F, echo=T}
 git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 ```
 
@@ -49,6 +49,21 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 # Two-sample MR: finding causal proteins to schizophrenia using cis pQTL
 
 ------------------------------------------------------------------------
+
+## Load R packages
+
+```{r,warning=F,message=F}
+library(rmarkdown)
+library(dplyr)
+library(data.table)
+library(pbapply)
+library(readr)
+library(Hmisc)
+library(here)
+library(knitr)
+library(kableExtra)
+library(TwoSampleMR)
+```
 
 ## Load data
 
