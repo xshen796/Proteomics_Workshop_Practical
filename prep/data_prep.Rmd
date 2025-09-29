@@ -1,0 +1,23 @@
+---
+title: "pQTL, SCZ GWAS sumstats, reference data preparation"
+author: X Shen  
+date: "\n`r format(Sys.time(), '%d %B, %Y')`"
+output: github_document
+always_allow_html: true
+---
+
+```{r library,echo=F,warning=F,error=F,message=F}
+library(rmarkdown)
+library(dplyr)
+library(data.table)
+library(pbapply)
+library(readr)
+library(Hmisc)
+library(here)
+library(knitr)
+library(kableExtra)
+library(TwoSampleMR)
+#library(MungeSumstats)
+#library(biomaRt)
+
+```
