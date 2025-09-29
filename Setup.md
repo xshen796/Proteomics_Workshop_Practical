@@ -44,7 +44,10 @@ check_and_install_package <- function(package_name) {
         install.packages(package_name, dependencies = TRUE)
       }else if(package_name=='TwoSampleMR'){
         library(remotes)
-        remotes::install_github("MRCIEU/TwoSampleMR")
+        remotes::install_github("MRCIEU/")
+      }else if(package_name=='coloc'){
+        library(remotes)
+        remotes::install_github("chr1swallace/coloc@main",build_vignettes=TRUE)
       }
       
       # Try to load the package after installation.
@@ -69,6 +72,7 @@ check_and_install_package("readr")
 check_and_install_package("here")
 check_and_install_package("remotes")
 check_and_install_package("TwoSampleMR")
+check_and_install_package("coloc")
 ```
 
 The code should be able to check if you have installed the packages
