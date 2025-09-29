@@ -76,7 +76,7 @@ format_pqtl_exposure <- function(f.x.dat,chr,pos0,pos1){
       format_data(.,type='exposure') %>% 
       clump_data(.,clump_kb=1000,clump_r2=0.001,pop='EUR') %>%
       arrange(pval.exposure) %>%
-      .[1,]
+      .[2,]
       return(x.dat.clumped)
   
 }
