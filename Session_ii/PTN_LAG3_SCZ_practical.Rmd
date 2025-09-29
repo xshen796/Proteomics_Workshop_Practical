@@ -167,7 +167,7 @@ dat.scz.outcome = dat.scz_gwas %>%
 Harmonise exposure and outcome data. Select the top SNP for Wald ratio test.
 
 ```{r, data harmonisation,eval=T,message=F,echo=T}
-dat.mr.ptn_scz =  harmonise_data(x.dat.exposure,dat.mdd.outcome) %>%
+dat.mr.ptn_scz =  harmonise_data(x.exposure.ptn,dat.scz.outcome) %>%
     arrange(pval.exposure) %>%
     head(n=1)
 ```
@@ -191,4 +191,4 @@ MR.dir %>% %>% knitr::kable(.)
 
 ------------------------------------------------------------------------
 
-## Load R packages
+We will use the cis region pQTL data generated above for MR analyses for colocalisation analysis. This time, we will use all the SNPs within the cis region.
