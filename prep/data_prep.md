@@ -41,16 +41,16 @@ Uniprot_ensembl = getBM(
   mart = mart_prot)
 colnames(Uniprot_ensembl) <- c("Ensembl_ID", "UniProt","Gene_symbol","CHR","start_pos","end_pos")
 
-knitr::kable(Uniprot_ensembl %>% arrange(CHR) %>% head(5), "pipe")
+knitr::kable(Uniprot_ensembl %>% filter(UniProt!='') %>% arrange(CHR) %>% head(5), "pipe")
 ```
 
-| Ensembl_ID      | UniProt | Gene_symbol | CHR | start_pos | end_pos |
-|:----------------|:--------|:------------|:----|----------:|--------:|
-| ENSG00000142611 |         | PRDM16      | 1   |   3069168 | 3438621 |
-| ENSG00000142611 | Q9HAZ2  | PRDM16      | 1   |   3069168 | 3438621 |
-| ENSG00000149527 |         | PLCH2       | 1   |   2425980 | 2505532 |
-| ENSG00000149527 | O75038  | PLCH2       | 1   |   2425980 | 2505532 |
-| ENSG00000142606 |         | MMEL1       | 1   |   2590639 | 2633016 |
+| Ensembl_ID      | UniProt | Gene_symbol | CHR | start_pos |  end_pos |
+|:----------------|:--------|:------------|:----|----------:|---------:|
+| ENSG00000142611 | Q9HAZ2  | PRDM16      | 1   |   3069168 |  3438621 |
+| ENSG00000149527 | O75038  | PLCH2       | 1   |   2425980 |  2505532 |
+| ENSG00000142606 | Q495T6  | MMEL1       | 1   |   2590639 |  2633016 |
+| ENSG00000048707 | Q5THJ4  | VPS13D      | 1   |  12230030 | 12512047 |
+| ENSG00000197921 | Q5TA89  | HES5        | 1   |   2528745 |  2530263 |
 
 ``` r
 write_tsv(Uniprot_ensembl,here::here('utils/uniprot_ensembl.tsv'))

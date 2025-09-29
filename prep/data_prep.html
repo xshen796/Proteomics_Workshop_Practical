@@ -90,7 +90,7 @@ body {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mart =</span> mart_prot)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Uniprot_ensembl) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Ensembl_ID&quot;</span>, <span class="st">&quot;UniProt&quot;</span>,<span class="st">&quot;Gene_symbol&quot;</span>,<span class="st">&quot;CHR&quot;</span>,<span class="st">&quot;start_pos&quot;</span>,<span class="st">&quot;end_pos&quot;</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Uniprot_ensembl <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(CHR) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>), <span class="st">&quot;pipe&quot;</span>)</span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Uniprot_ensembl <span class="sc">%&gt;%</span> <span class="fu">filter</span>(UniProt<span class="sc">!=</span><span class="st">&#39;&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(CHR) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>), <span class="st">&quot;pipe&quot;</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -105,27 +105,11 @@ body {
 <tbody>
 <tr class="odd">
 <td align="left">ENSG00000142611</td>
-<td align="left"></td>
-<td align="left">PRDM16</td>
-<td align="left">1</td>
-<td align="right">3069168</td>
-<td align="right">3438621</td>
-</tr>
-<tr class="even">
-<td align="left">ENSG00000142611</td>
 <td align="left">Q9HAZ2</td>
 <td align="left">PRDM16</td>
 <td align="left">1</td>
 <td align="right">3069168</td>
 <td align="right">3438621</td>
-</tr>
-<tr class="odd">
-<td align="left">ENSG00000149527</td>
-<td align="left"></td>
-<td align="left">PLCH2</td>
-<td align="left">1</td>
-<td align="right">2425980</td>
-<td align="right">2505532</td>
 </tr>
 <tr class="even">
 <td align="left">ENSG00000149527</td>
@@ -137,11 +121,27 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">ENSG00000142606</td>
-<td align="left"></td>
+<td align="left">Q495T6</td>
 <td align="left">MMEL1</td>
 <td align="left">1</td>
 <td align="right">2590639</td>
 <td align="right">2633016</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000048707</td>
+<td align="left">Q5THJ4</td>
+<td align="left">VPS13D</td>
+<td align="left">1</td>
+<td align="right">12230030</td>
+<td align="right">12512047</td>
+</tr>
+<tr class="odd">
+<td align="left">ENSG00000197921</td>
+<td align="left">Q5TA89</td>
+<td align="left">HES5</td>
+<td align="left">1</td>
+<td align="right">2528745</td>
+<td align="right">2530263</td>
 </tr>
 </tbody>
 </table>
