@@ -25,10 +25,77 @@ Readings:
 -   **Mendelian Randomisation analysis**: Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S, Chen CY, Lencz T. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study. JAMA Psychiatry. 2025 May 1;82(5):481-491. https://doi.org/10.1001/jamapsychiatry.2025.0033.
 
 
-**See [here]() if you need more information on how we accessed and prepared the data for this tutorial**
+# Data preparation
 
+## Clone this github repo
 
+Use the script below
 
-```{r,echo=T,eval=F}
+```{r, eval=F, echo=T}
+git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
+```
+
+## Data preparation
+
+**See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial**
+
+# Two-sample MR: finding causal proteins to schizophrenia using cis pQTL
+
+## Load data
+
+Let's first load schizophrenia GWAS sumstats and pQTL data
+
+```{r load sumstats,eval=T,message=F,echo=T}
+dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
+
+dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz')
+dat.pqtl_lag3 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_9950_229_LAG3_LAG_3_10032022_lo_annot.txt.gz')
 
 ```
+
+Let's load protein annotation and see which proteins we will be looking at
+
+```{r load annotation,eval=T,message=F,echo=T}
+ref.somalogic = read_tsv(here::here('utils/ref_somalogic.tsv')) %>%
+    dplyr::select(SeqId,UniProt,Protein_full_name,Gene,Ensembl_Gene_ID)
+
+knitr::kable(ref.somalogic, "pipe")
+```
+
+Here in this table:
+
+-   SeqID: unique protein identifier of SOMALogic assay
+
+-   UniProt, Protein_full_name: Uniprot ID and full name of the protein
+
+-   Gene, Ensembl_Gene_ID: Gene symbol and Ensembl ID
+
+
+## QC and prepare pQTL data (protein as exposure)
+
+We need to select the cis region of ***PTN***. Find genomic locations for ***PTN*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=PTN&keywords=PTN)
+
+Our genome build is GRCh37/hg19.
+
+![PTN location](ptn_location.png)
+
+```{r,eval=T,message=F,echo=T}
+gene_boundary = data.frame(lower=136912088,upper=137028479)
+gene_chr = 7
+```
+
+Select cis region sumstats: 1Mb extended area of the gene region
+
+```{r,eval=T,message=F,echo=T}
+dat.cis_pqtl_ptn = dat.pqtl_ptn %>% 
+  dplyr::filter(CHR==gene_chr,BP > (gene_boundary$lower - 1000000), BP < (gene_boundary$upper + 1000000))
+```
+
+Double check if data only includes cis region
+
+```{r,eval=T,message=F,echo=T}
+range(dat.cis_pqtl_ptn$BP)
+```
+
+Select genome-wide significant genetic instruments with pval < 5e-8
+
