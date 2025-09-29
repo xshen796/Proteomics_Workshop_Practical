@@ -137,7 +137,7 @@ dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(SNP %in% dat.scz_gwas$SNP)
 
 ```{r,eval=T,message=F,echo=T}
 dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
-  dplyr::filter(pval<5e-8>)
+  dplyr::filter(pval<5e-8)
 ```
 
 ➡️ Clump data using the 1000 Genome central European genotype data as reference.
@@ -176,12 +176,7 @@ dat.mr.ptn_scz =  harmonise_data(x.dat.exposure,dat.mdd.outcome) %>%
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 
-```{MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,}
-                       b_out = dat.mr$beta.outcome,
-                       se_exp = dat.mr$se.exposure,
-                       se_out = dat.mr$se.outcome) 
-MR.wr %>% knitr::kable(.)
-```
+`{MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,}                        b_out = dat.mr$beta.outcome,                        se_exp = dat.mr$se.exposure,                        se_out = dat.mr$se.outcome)  MR.wr %>% knitr::kable(.)`
 
 Here, b = \`r MR.wr\$b %\>% round(.,digits=3), p = \`r MR.wr\$pval\`. This means a potentially positive causal association between plasma PTN abundance and liability of schizophrenia.
 
@@ -192,7 +187,7 @@ MR.dir = directionality_test(dat.mr)
 MR.dir %>% %>% knitr::kable(.)
 ```
 
-# Colocalisation: consolidating causal evidence 
+# Colocalisation: consolidating causal evidence
 
 ------------------------------------------------------------------------
 
