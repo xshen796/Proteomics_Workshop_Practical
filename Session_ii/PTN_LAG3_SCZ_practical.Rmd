@@ -143,7 +143,7 @@ dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>%
 ➡️ Clump data using the 1000 Genome central European genotype data as reference.
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
+dat.cis_sig_clump_pqtl_ptn = dat.cis_sig_pqtl_ptn %>% 
   clump_data(.,clump_kb=1000,clump_r2=0.001)
 ```
 
@@ -152,7 +152,7 @@ If you see any error message, it is likely that you have not set up your R envir
 ➡️ Reformat exposure data (pQTL)
 
 ```{r,warning=F,message=F}
-dat.exposure.ptn = format_data(dat.cis_sig_pqtl_ptn,type='outcome')
+dat.exposure.ptn = format_data(dat.cis_sig_clump_pqtl_ptn,type='exposure')
 ```
 
 ## QC and prepare schizophrenia sumstats (schizophrenia as outcome)
@@ -166,8 +166,8 @@ dat.scz.outcome = dat.scz_gwas %>%
 
 Harmonise exposure and outcome data. Select the top SNP for Wald ratio test.
 
-```{r, data harmonisation,eval=T,message=F,echo=T}
-dat.mr.ptn_scz =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
+```{r, data harmonisation,eval=T,echo=T}
+dat.mr =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
     arrange(pval.exposure) %>%
     head(n=1)
 ```
@@ -176,7 +176,14 @@ dat.mr.ptn_scz =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 
-`{MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,}                        b_out = dat.mr$beta.outcome,                        se_exp = dat.mr$se.exposure,                        se_out = dat.mr$se.outcome)  MR.wr %>% knitr::kable(.)`
+```{r}
+MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
+                   b_out = dat.mr$beta.outcome,
+                   se_exp = dat.mr$se.exposure,
+                   se_out = dat.mr$se.outcome)  
+
+MR.wr %>% knitr::kable(.)
+```
 
 Here, b = \`r MR.wr\$b %\>% round(.,digits=3), p = \`r MR.wr\$pval\`. This means a potentially positive causal association between plasma PTN abundance and liability of schizophrenia.
 
