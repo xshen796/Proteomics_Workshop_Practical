@@ -167,7 +167,7 @@ dat.scz.outcome = dat.scz_gwas %>%
 Harmonise exposure and outcome data. Select the top SNP for Wald ratio test.
 
 ```{r, data harmonisation,eval=T,message=F,echo=T}
-dat.mr.ptn_scz =  harmonise_data(x.exposure.ptn,dat.scz.outcome) %>%
+dat.mr.ptn_scz =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
     arrange(pval.exposure) %>%
     head(n=1)
 ```
