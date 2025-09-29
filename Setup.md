@@ -85,14 +85,11 @@ Optional readings on the datasets we will use:
 
 Readings:
 
--   Schizophrenia GWAS: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et
-    al. Large-scale plasma proteomics comparisons through genetics and
-    disease associations. Nature 622, 348–358 (2023).
-    <https://doi.org/10.1038/s41586-023-06563-x>
-
--   Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci
-    implicates genes and synaptic biology in schizophrenia. Nature 604,
-    502–508 (2022). <https://doi.org/10.1038/s41586-022-04434-5>
+-   Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S,
+    Chen CY, Lencz T. Circulating Blood-Based Proteins in
+    Psychopathology and Cognition: A Mendelian Randomization Study. JAMA
+    Psychiatry. 2025 May 1;82(5):481-491.
+    <https://doi.org/10.1001/jamapsychiatry.2025.0033>.
 
 ## What next
 
