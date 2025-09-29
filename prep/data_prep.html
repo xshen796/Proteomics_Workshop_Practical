@@ -90,7 +90,7 @@ body {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mart =</span> mart_prot)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Uniprot_ensembl) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Ensembl_ID&quot;</span>, <span class="st">&quot;UniProt&quot;</span>,<span class="st">&quot;Gene_symbol&quot;</span>,<span class="st">&quot;CHR&quot;</span>,<span class="st">&quot;start_pos&quot;</span>,<span class="st">&quot;end_pos&quot;</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(Uniprot_ensembl[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]), <span class="st">&quot;pipe&quot;</span>)</span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Uniprot_ensembl <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(CHR) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>), <span class="st">&quot;pipe&quot;</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -98,44 +98,50 @@ body {
 <th align="left">UniProt</th>
 <th align="left">Gene_symbol</th>
 <th align="left">CHR</th>
+<th align="right">start_pos</th>
+<th align="right">end_pos</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">ENSG00000198888</td>
-<td align="left">P03886</td>
-<td align="left">MT-ND1</td>
-<td align="left">MT</td>
+<td align="left">ENSG00000142611</td>
+<td align="left"></td>
+<td align="left">PRDM16</td>
+<td align="left">1</td>
+<td align="right">3069168</td>
+<td align="right">3438621</td>
 </tr>
 <tr class="even">
-<td align="left">ENSG00000198763</td>
-<td align="left">P03891</td>
-<td align="left">MT-ND2</td>
-<td align="left">MT</td>
+<td align="left">ENSG00000142611</td>
+<td align="left">Q9HAZ2</td>
+<td align="left">PRDM16</td>
+<td align="left">1</td>
+<td align="right">3069168</td>
+<td align="right">3438621</td>
 </tr>
 <tr class="odd">
-<td align="left">ENSG00000198804</td>
-<td align="left">P00395</td>
-<td align="left">MT-CO1</td>
-<td align="left">MT</td>
+<td align="left">ENSG00000149527</td>
+<td align="left"></td>
+<td align="left">PLCH2</td>
+<td align="left">1</td>
+<td align="right">2425980</td>
+<td align="right">2505532</td>
 </tr>
 <tr class="even">
-<td align="left">ENSG00000198712</td>
-<td align="left">P00403</td>
-<td align="left">MT-CO2</td>
-<td align="left">MT</td>
+<td align="left">ENSG00000149527</td>
+<td align="left">O75038</td>
+<td align="left">PLCH2</td>
+<td align="left">1</td>
+<td align="right">2425980</td>
+<td align="right">2505532</td>
 </tr>
 <tr class="odd">
-<td align="left">ENSG00000228253</td>
-<td align="left">P03928</td>
-<td align="left">MT-ATP8</td>
-<td align="left">MT</td>
-</tr>
-<tr class="even">
-<td align="left">ENSG00000198899</td>
-<td align="left">P00846</td>
-<td align="left">MT-ATP6</td>
-<td align="left">MT</td>
+<td align="left">ENSG00000142606</td>
+<td align="left"></td>
+<td align="left">MMEL1</td>
+<td align="left">1</td>
+<td align="right">2590639</td>
+<td align="right">2633016</td>
 </tr>
 </tbody>
 </table>

@@ -41,17 +41,16 @@ Uniprot_ensembl = getBM(
   mart = mart_prot)
 colnames(Uniprot_ensembl) <- c("Ensembl_ID", "UniProt","Gene_symbol","CHR","start_pos","end_pos")
 
-knitr::kable(head(Uniprot_ensembl[, 1:4]), "pipe")
+knitr::kable(Uniprot_ensembl %>% arrange(CHR) %>% head(5), "pipe")
 ```
 
-| Ensembl_ID      | UniProt | Gene_symbol | CHR |
-|:----------------|:--------|:------------|:----|
-| ENSG00000198888 | P03886  | MT-ND1      | MT  |
-| ENSG00000198763 | P03891  | MT-ND2      | MT  |
-| ENSG00000198804 | P00395  | MT-CO1      | MT  |
-| ENSG00000198712 | P00403  | MT-CO2      | MT  |
-| ENSG00000228253 | P03928  | MT-ATP8     | MT  |
-| ENSG00000198899 | P00846  | MT-ATP6     | MT  |
+| Ensembl_ID      | UniProt | Gene_symbol | CHR | start_pos | end_pos |
+|:----------------|:--------|:------------|:----|----------:|--------:|
+| ENSG00000142611 |         | PRDM16      | 1   |   3069168 | 3438621 |
+| ENSG00000142611 | Q9HAZ2  | PRDM16      | 1   |   3069168 | 3438621 |
+| ENSG00000149527 |         | PLCH2       | 1   |   2425980 | 2505532 |
+| ENSG00000149527 | O75038  | PLCH2       | 1   |   2425980 | 2505532 |
+| ENSG00000142606 |         | MMEL1       | 1   |   2590639 | 2633016 |
 
 ``` r
 write_tsv(Uniprot_ensembl,here::here('utils/uniprot_ensembl.tsv'))

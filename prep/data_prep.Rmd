@@ -53,7 +53,7 @@ Uniprot_ensembl = getBM(
   mart = mart_prot)
 colnames(Uniprot_ensembl) <- c("Ensembl_ID", "UniProt","Gene_symbol","CHR","start_pos","end_pos")
 
-knitr::kable(head(Uniprot_ensembl[, 1:4]), "pipe")
+knitr::kable(Uniprot_ensembl %>% arrange(CHR) %>% head(5), "pipe")
 
 write_tsv(Uniprot_ensembl,here::here('utils/uniprot_ensembl.tsv'))
 ```
