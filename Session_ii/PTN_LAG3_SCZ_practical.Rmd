@@ -63,6 +63,7 @@ library(here)
 library(knitr)
 library(kableExtra)
 library(TwoSampleMR)
+library(coloc)
 ```
 
 ## Load data
@@ -72,7 +73,7 @@ Let's first load schizophrenia GWAS sumstats and pQTL data
 ```{r load sumstats,message=F,warning=F,echo=T}
 dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
 
-dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz')
+dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz') %>% mutate(eaf = effectAlleleFreq)
 
 dat.pqtl_lag3 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_9950_229_LAG3_LAG_3_10032022_lo_annot.txt.gz')
 ```
@@ -190,3 +191,9 @@ Here, b = \`r MR.wr\$b %\>% round(.,digits=3), p = \`r MR.wr\$pval\`. This means
 MR.dir = directionality_test(dat.mr)
 MR.dir %>% %>% knitr::kable(.)
 ```
+
+# Colocalisation: consolidating causal evidence 
+
+------------------------------------------------------------------------
+
+## Load R packages
