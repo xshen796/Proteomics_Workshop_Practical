@@ -14,6 +14,8 @@ We will use two-sample Mendelian randomisation to test causal relationship betwe
 
 # Data used in this tutorial and relevant readings
 
+------------------------------------------------------------------------
+
 We will use publicly available summary statistics from the [Psychiatric Genomic Consortium](https://pgc.unc.edu/for-researchers/download-results/) and pQTL data from [deCODE](https://www.decode.com/summarydata/) (Ferkingstad, E. et al. Large-scale integration of the plasma proteome with genetics and disease). Note that the complete pQTL data requires a simple access sign up. You can download your own version for your analysis following the link, or you could follow this tutorial using a local copy of pre-processed pQTL data.
 
 Readings:
@@ -24,12 +26,13 @@ Readings:
 
 -   **Mendelian Randomisation analysis**: Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S, Chen CY, Lencz T. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study. JAMA Psychiatry. 2025 May 1;82(5):481-491. https://doi.org/10.1001/jamapsychiatry.2025.0033.
 
-
 # Data preparation
+
+------------------------------------------------------------------------
 
 ## Clone this github repo
 
-Use the script below
+Use the script below to clone this github repository on your local machine:
 
 ```{r, eval=F, echo=T}
 git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
@@ -41,25 +44,27 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 
 ## Data preparation
 
-**See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial**
+**See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial.**
 
 # Two-sample MR: finding causal proteins to schizophrenia using cis pQTL
+
+------------------------------------------------------------------------
 
 ## Load data
 
 Let's first load schizophrenia GWAS sumstats and pQTL data
 
-```{r load sumstats,eval=T,message=F,echo=T}
+```{r load sumstats,message=F,warning=F,echo=T}
 dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
 
 dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz')
-dat.pqtl_lag3 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_9950_229_LAG3_LAG_3_10032022_lo_annot.txt.gz')
 
+dat.pqtl_lag3 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_9950_229_LAG3_LAG_3_10032022_lo_annot.txt.gz')
 ```
 
 Let's load protein annotation and see which proteins we will be looking at
 
-```{r load annotation,eval=T,message=F,echo=T}
+```{r load annotation,message=F,echo=T}
 ref.somalogic = read_tsv(here::here('utils/ref_somalogic.tsv')) %>%
     dplyr::select(SeqId,UniProt,Protein_full_name,Gene,Ensembl_Gene_ID)
 
@@ -74,12 +79,11 @@ Here in this table:
 
 -   Gene, Ensembl_Gene_ID: Gene symbol and Ensembl ID
 
-
 ## QC and prepare pQTL data (protein as exposure)
 
 ➡️ We need to select the cis region of ***PTN***. Find genomic locations for ***PTN*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=PTN&keywords=PTN)
 
-Our genome build is GRCh37/hg19.
+Our genome build is **GRCh37/hg19**.
 
 ![PTN location](ptn_location.png)
 
@@ -101,28 +105,39 @@ Double check if data only includes cis region
 range(dat.cis_pqtl_ptn$BP)
 ```
 
-➡️ Keep common variants
+➡️ Keep common variants.
 
 ```{r,eval=T,message=F,echo=T}
 dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(eaf < 0.995, eaf > 0.005)
 ```
 
-➡️ Select genome-wide significant genetic instruments with pval < 5e-8
+➡️ Keep variants that also present in the schizophrenia GWAS sumstats.
+
+```{r,message=F,warning=F}
+dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(SNP %in% dat.scz_gwas$SNP)
+```
+
+➡️ Select genome-wide significant genetic instruments (pval \< 5e-8).
 
 ```{r,eval=T,message=F,echo=T}
 dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
   dplyr::filter(pval<5e-8>)
 ```
 
-➡️ Clump data using the 1000 Genome central European genotype data as reference
+➡️ Clump data using the 1000 Genome central European genotype data as reference.
 
 ```{r,eval=T,message=F,echo=T}
 dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
   clump_data(.,clump_kb=1000,clump_r2=0.001)
 ```
 
-If you see error message, it is likely that you have not set up your R environment correctly. See this [tutorial](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md).
+If you see any error message, it is likely that you have not set up your R environment correctly. See this [tutorial](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md).
 
+➡️ Reformat exposure data (pQTL)
+
+```{r,warning=F,message=F}
+dat.exposure.ptn = format_data(dat.cis_sig_pqtl_ptn,type='outcome')
+```
 
 ## QC and prepare schizophrenia sumstats (schizophrenia as outcome)
 
@@ -133,7 +148,30 @@ dat.scz.outcome = dat.scz_gwas %>%
 
 ## Harmonise exposure and outcome data
 
+Harmonise exposure and outcome data. Select the top SNP for Wald ratio test.
+
 ```{r, data harmonisation,eval=T,message=F,echo=T}
-dat.scz.outcome = dat.scz_gwas %>% 
-  format_data(.,type='outcome') 
+dat.mr.ptn_scz =  harmonise_data(x.dat.exposure,dat.mdd.outcome) %>%
+    arrange(pval.exposure) %>%
+    head(n=1)
+```
+
+## Run two-sample Mendelian randomisation (Wald ratio test and sign)
+
+➡️ Use the script below to run Wald ratio test. See result below:
+
+```{MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,}
+                       b_out = dat.mr$beta.outcome,
+                       se_exp = dat.mr$se.exposure,
+                       se_out = dat.mr$se.outcome) 
+MR.wr %>% knitr::kable(.)
+```
+
+Here, b = \`r MR.wr\$b %\>% round(.,digits=3), p = \`r MR.wr\$pval\`. This means a potentially positive causal association between plasma PTN abundance and liability of schizophrenia.
+
+➡️ Use the script below to run MR Steiger directionality test. Here, we use it as a complementary analysis to Wald ratio.
+
+```{r mr steiger, message=F,warning=F}
+MR.dir = directionality_test(dat.mr)
+MR.dir %>% %>% knitr::kable(.)
 ```
