@@ -35,6 +35,10 @@ Use the script below
 git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 ```
 
+## Set up your R environment to access OpenGWAS data
+
+💡See a quick guide here if you haven't done so: [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md)
+
 ## Data preparation
 
 **See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial**
@@ -73,7 +77,7 @@ Here in this table:
 
 ## QC and prepare pQTL data (protein as exposure)
 
-We need to select the cis region of ***PTN***. Find genomic locations for ***PTN*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=PTN&keywords=PTN)
+➡️ We need to select the cis region of ***PTN***. Find genomic locations for ***PTN*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=PTN&keywords=PTN)
 
 Our genome build is GRCh37/hg19.
 
@@ -97,5 +101,39 @@ Double check if data only includes cis region
 range(dat.cis_pqtl_ptn$BP)
 ```
 
-Select genome-wide significant genetic instruments with pval < 5e-8
+➡️ Keep common variants
 
+```{r,eval=T,message=F,echo=T}
+dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(eaf < 0.995, eaf > 0.005)
+```
+
+➡️ Select genome-wide significant genetic instruments with pval < 5e-8
+
+```{r,eval=T,message=F,echo=T}
+dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
+  dplyr::filter(pval<5e-8>)
+```
+
+➡️ Clump data using the 1000 Genome central European genotype data as reference
+
+```{r,eval=T,message=F,echo=T}
+dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
+  clump_data(.,clump_kb=1000,clump_r2=0.001)
+```
+
+If you see error message, it is likely that you have not set up your R environment correctly. See this [tutorial](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md).
+
+
+## QC and prepare schizophrenia sumstats (schizophrenia as outcome)
+
+```{r, format scz gwas,eval=T,message=F,echo=T}
+dat.scz.outcome = dat.scz_gwas %>% 
+  format_data(.,type='outcome') 
+```
+
+## Harmonise exposure and outcome data
+
+```{r, data harmonisation,eval=T,message=F,echo=T}
+dat.scz.outcome = dat.scz_gwas %>% 
+  format_data(.,type='outcome') 
+```

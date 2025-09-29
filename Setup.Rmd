@@ -71,6 +71,11 @@ check_and_install_package("coloc")
 
 The code should be able to check if you have installed the packages correctly. Contact Xueyi Shen (xueyi.shen@ed.ac.uk) if you run into any issue.
 
+## Set up your API token
+
+See a quick guide [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md)
+
+
 ## Readings
 
 Optional readings on the datasets we will use:
