@@ -1,50 +1,38 @@
----
-title: "pQTL, SCZ GWAS sumstats, reference data preparation"
-author: X Shen  
-date: "\n`r format(Sys.time(), '%d %B, %Y')`"
-output: github_document
-always_allow_html: true
----
-
-```{r library,echo=F,warning=F,error=F,message=F}
-# Note that if you want to run this script on your local machine, you may need to install additional packages listed down here.
-
-library(rmarkdown)
-library(dplyr)
-library(data.table)
-library(pbapply)
-library(readr)
-library(Hmisc)
-library(here)
-library(knitr)
-library(kableExtra)
-library(TwoSampleMR)
-library(MungeSumstats)
-library(biomaRt)
-library(stringr)
-```
+pQTL, SCZ GWAS sumstats, reference data preparation
+================
+X Shen
+29 September, 2025
 
 # Prepare annotation file
 
 ## Files required for our analysis
 
--   Protein assay annotations. Key information include: UniProt ID, gene name, gene Ensembl IDs, SeqIDs. This is usually assay-specific. deCODE proteomic data used a SOMALogic assay. More information can be found in the [paper](https://www.nature.com/articles/s41588-021-00978-w). We will use their [Supplementary Table 1](https://static-content.springer.com/esm/art%3A10.1038%2Fs41588-021-00978-w/MediaObjects/41588_2021_978_MOESM4_ESM.xlsx).
+-   Protein assay annotations. Key information include: UniProt ID, gene
+    name, gene Ensembl IDs, SeqIDs. This is usually assay-specific.
+    deCODE proteomic data used a SOMALogic assay. More information can
+    be found in the
+    [paper](https://www.nature.com/articles/s41588-021-00978-w). We will
+    use their [Supplementary Table
+    1](https://static-content.springer.com/esm/art%3A10.1038%2Fs41588-021-00978-w/MediaObjects/41588_2021_978_MOESM4_ESM.xlsx).
 
     The protein annotation table looks this:
 
     | SeqId    | Protein (short name) | Protein (full name)                                | Gene   | UniProt | Organism | Type    | Ensembl.Gene.ID |
-    | -------- | -------------------- | -------------------------------------------------- | ------ | ------- | -------- | ------- | --------------- |
+    |----------|----------------------|----------------------------------------------------|--------|---------|----------|---------|-----------------|
     | 10000_28 | CRBB2                | Beta-crystallin B2                                 | CRYBB2 | P43320  | human    | Protein | ENSG00000244752 |
     | 10001_7  | c-Raf                | RAF proto-oncogene serine/threonine-protein kinase | RAF1   | P04049  | human    | Protein | ENSG00000132155 |
     | 10003_15 | ZNF41                | Zinc finger protein 41                             | ZNF41  | P51814  | human    | Protein | ENSG00000147124 |
 
     A local copy is stored in utils/ref_somalogic.tsv
 
+-   Gene annotations. Key information is start and end genomic positions
+    of a given protein-encoding gene. We can query using the ‘bioMart’ R
+    package. Check the tutorial
+    [here](https://bioconductor.org/packages/release/bioc/vignettes/biomaRt/inst/doc/accessing_ensembl.html).
+    View online for more info
+    [here](https://www.ensembl.org/info/data/biomart/how_to_use_biomart.html).
 
-
--   Gene annotations. Key information is start and end genomic positions of a given protein-encoding gene. We can query using the 'bioMart' R package. Check the tutorial [here](https://bioconductor.org/packages/release/bioc/vignettes/biomaRt/inst/doc/accessing_ensembl.html). View online for more info [here](https://www.ensembl.org/info/data/biomart/how_to_use_biomart.html). 
-
-```{r, echo=T,warning=F,message=F}
+``` r
 # Map to ensembl IDs
 ## Get reference ensembl database
 mart_prot <- useMart("ensembl", dataset = "hsapiens_gene_ensembl") # human
@@ -54,25 +42,37 @@ Uniprot_ensembl = getBM(
 colnames(Uniprot_ensembl) <- c("Ensembl_ID", "UniProt","Gene_symbol","CHR","start_pos","end_pos")
 
 knitr::kable(head(Uniprot_ensembl[, 1:4]), "pipe")
+```
 
+| Ensembl_ID      | UniProt | Gene_symbol | CHR |
+|:----------------|:--------|:------------|:----|
+| ENSG00000198888 | P03886  | MT-ND1      | MT  |
+| ENSG00000198763 | P03891  | MT-ND2      | MT  |
+| ENSG00000198804 | P00395  | MT-CO1      | MT  |
+| ENSG00000198712 | P00403  | MT-CO2      | MT  |
+| ENSG00000228253 | P03928  | MT-ATP8     | MT  |
+| ENSG00000198899 | P00846  | MT-ATP6     | MT  |
+
+``` r
 write_tsv(Uniprot_ensembl,here::here('utils/uniprot_ensembl.tsv'))
 ```
 
     A local copy of Ensembl annotation is stored in utils/uniprot_ensembl.tsv
 
-
 -   Variants annotation for pQTL data
 
-    Sometimes researchers choose to store additional variant information, such as allele frequency, that tend to be consistent across multiple analyses, separately from individual GWAS sumstats. 
+    Sometimes researchers choose to store additional variant
+    information, such as allele frequency, that tend to be consistent
+    across multiple analyses, separately from individual GWAS sumstats.
 
-    You can request this information for the pQTL data from [here](https://download.decode.is/form/2021/assocvariants.annotated.txt.gz).
+    You can request this information for the pQTL data from
+    [here](https://download.decode.is/form/2021/assocvariants.annotated.txt.gz).
 
     A copy of this information is stored on cloud.
 
-
 # Prepare pQTL data
 
-```{r,format pQTL,echo=T,eval=F}
+``` r
 annot_variant = read_tsv('data/assocvariants.annotated.txt.gz') %>%
     dplyr::select(SNP=rsids,effect_allele=effectAllele,eaf=effectAlleleFreq,Name) %>%
     mutate(n_allele = nchar(effect_allele)) %>%
@@ -124,16 +124,16 @@ list.files(here::here('data/deCODE_pQTL/'),full.names = T) %>%
   pblapply(format_pqtl_exposure,x.ref=ref.somalogic)
 ```
 
-
 # Prepare SCZ sumstats
 
-Download SCZ sumstats [here]( https://pgc.unc.edu/for-researchers/download-results/)
+Download SCZ sumstats
+[here](https://pgc.unc.edu/for-researchers/download-results/)
 
-```{r, read MDD gwas sumstats,eval=F,echo=T}
+``` r
 scz.gwas = read_tsv(here::here('data/daner_PGC_SCZ_w3_90_0518d_eur.gz'))
 ```
 
-```{r, rename MDD sumstats colnames,eval=F,echo=T}
+``` r
 scz.gwas = scz.gwas %>% 
  mutate(beta = log(OR)) %>% 
  dplyr::select(SNP,effect_allele=A1,other_allele=A2,
