@@ -176,7 +176,7 @@ dat.mr =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 
-```{r}
+```{r,eval=F,echo=T}
 MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
                    b_out = dat.mr$beta.outcome,
                    se_exp = dat.mr$se.exposure,
@@ -185,11 +185,11 @@ MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
 MR.wr %>% knitr::kable(.)
 ```
 
-Here, b = \`r MR.wr\$b %\>% round(.,digits=3), p = \`r MR.wr\$pval\`. This means a potentially positive causal association between plasma PTN abundance and liability of schizophrenia.
+
 
 ➡️ Use the script below to run MR Steiger directionality test. Here, we use it as a complementary analysis to Wald ratio.
 
-```{r mr steiger, message=F,warning=F}
+```{r mr steiger, message=F,warning=F,echo=T,eval=F}
 MR.dir = directionality_test(dat.mr)
 MR.dir %>% %>% knitr::kable(.)
 ```
