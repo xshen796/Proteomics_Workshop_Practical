@@ -214,7 +214,7 @@ dat.mr =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
 
     ## Harmonising 3045_72_PTN_PTN (WWlYLm) and SCZ (mI3waR)
 
-## Run two-sample Mendelian randomisation (Wald ratio test and sign)
+## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 

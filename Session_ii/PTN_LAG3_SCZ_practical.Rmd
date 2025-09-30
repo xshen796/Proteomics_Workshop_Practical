@@ -172,7 +172,7 @@ dat.mr =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
     head(n=1)
 ```
 
-## Run two-sample Mendelian randomisation (Wald ratio test and sign)
+## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 

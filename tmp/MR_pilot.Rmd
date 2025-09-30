@@ -51,7 +51,8 @@ Download pQTL annotation file from [here](https://download.decode.is/form/2021/a
 
 ```{r,format pQTL as exposure data and clump}
 annot_variant = read_tsv('data/assocvariants.annotated.txt.gz') %>%
-    dplyr::select(SNP=rsids,effect_allele=effectAllele,eaf=effectAlleleFreq)
+    dplyr::select(SNP=rsids,effect_allele=effectAllele,eaf=effectAlleleFreq) %>%
+
 
 format_pqtl_exposure <- function(f.x.dat,chr,pos0,pos1){
   Symbol = f.x.dat %>% gsub('_10032022.txt.gz','',.) %>% basename 
