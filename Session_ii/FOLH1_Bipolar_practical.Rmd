@@ -241,7 +241,6 @@ dat.coloc.merge_align = dat.coloc.merge %>%
 sum.flipped = sum(dat.coloc.merge_align$flipped)
 ```
 
-`r sum.flipped` SNPs with flipped alleles
 
 ➡️ Format data for SuSie colocalisation analysis
 
@@ -277,3 +276,13 @@ res.coloc
 ```
 
 ➡️ Visualise the results
+
+## Interpreting the findings
+
+### Gene lookup (GeneCards)
+
+### Mapping FOLH1 to drugs
+
+-   Source 1: OpenTargets
+
+-   Source 2: DrugBank online
