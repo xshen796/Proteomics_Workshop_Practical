@@ -183,7 +183,7 @@ MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
                    se_exp = dat.mr$se.exposure,
                    se_out = dat.mr$se.outcome)  
 
-MR.wr %>% knitr::kable(.)
+MR.wr 
 ```
 
 ➡️ Use the script below to run MR Steiger directionality test. Here, we use it as a complementary analysis to Wald ratio.
