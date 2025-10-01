@@ -158,7 +158,7 @@ dat.exposure.ptn = format_data(dat.cis_sig_clump_pqtl_ptn,type='exposure')
 ## QC and prepare schizophrenia sumstats (schizophrenia as outcome)
 
 ```{r, format scz gwas,eval=T,message=F,echo=T}
-dat.scz.outcome = dat.scz_gwas %>% 
+dat.scz.outcome = dat.scz_gwas %>% data.frame %>%
   format_data(.,type='outcome') 
 ```
 
@@ -199,3 +199,84 @@ MR.dir %>% %>% knitr::kable(.)
 ------------------------------------------------------------------------
 
 We will use the cis region pQTL data generated above for MR analyses for colocalisation analysis. This time, we will use all the SNPs within the cis region.
+
+➡️ Get cis pqtl data and BP GWAS sumstats and reformat for data harmonisation
+
+```{r prepare cis pqtl data, message=F,warning=F,echo=T,eval=F}
+dat.coloc.pqtl = dat.cis_pqtl_ptn %>%
+      dplyr::select(SNP,CHR,BP,effect_allele.prot=effect_allele,other_allele.prot=other_allele,
+                eaf.prot=eaf,beta.prot=beta,se.prot=se,
+                pval.prot=pval,samplesize.prot=samplesize,Phenotype.prot=Phenotype) %>%
+      mutate(CHR=as.numeric(CHR))
+```
+
+
+```{r prepare bp sumstats, message=F,warning=F,echo=T,eval=F}
+dat.coloc.bp = dat.scz_gwas %>%
+      dplyr::select(SNP,CHR,BP,effect_allele.bp=effect_allele,other_allele.bp=other_allele,
+                eaf.bp=eaf,beta.bp=beta,se.bp=se,
+                pval.bp=pval,samplesize.bp=samplesize,Phenotype.bp=Phenotype)
+```
+
+➡️ Merge pqtl and bp GWAS data
+
+```{r merge pqtl and bp data, message=F,warning=F,echo=T,eval=F}
+dat.coloc.merge = left_join(dat.coloc.pqtl,dat.coloc.bp,by=c('SNP','CHR','BP')) 
+```
+
+➡️ Align alleles
+
+```{r coloc data harmonisation, message=F,warning=F,echo=T,eval=F}
+dat.coloc.merge_align = dat.coloc.merge %>% 
+      mutate(ea.prot.aligned = ifelse(eaf.prot < 0.5, effect_allele.prot,other_allele.prot),
+             nea.prot.aligned = ifelse(eaf.prot < 0.5, other_allele.prot,effect_allele.prot),
+             maf.prot = ifelse(eaf.prot < 0.5, eaf.prot,1-eaf.prot),
+             beta.prot.aligned = ifelse(eaf.prot < 0.5, beta.prot,-beta.prot)) %>% 
+      mutate(ea.bp.aligned = ifelse(eaf.bp < 0.5, effect_allele.bp,other_allele.bp),
+             nea.bp.aligned = ifelse(eaf.bp < 0.5, other_allele.bp,effect_allele.bp),
+             maf.bp = ifelse(eaf.bp < 0.5, eaf.bp,1-eaf.bp),
+             beta.bp.aligned = ifelse(eaf.bp < 0.5, beta.bp,-beta.bp)) %>% 
+      mutate(flipped = ea.prot.aligned!=ea.bp.aligned) %>% 
+      filter(!is.na(pval.bp),maf.bp>0.001) %>% 
+      .[!duplicated(.$SNP),]
+
+sum.flipped = sum(dat.coloc.merge_align$flipped)
+```
+
+```r sum.flipped``` SNPs with flipped alleles
+
+➡️ Format data for SuSie colocalisation analysis
+
+```{r create D1 and D2 for susie colocalisation, message=F,warning=F,echo=T,eval=F}
+D1 <- list(
+             type = "quant", # quantitative trait
+             beta = dat.coloc.merge_align$beta.prot.aligned,
+             varbeta = dat.coloc.merge_align$se.prot^2, # note that this is standard error squared
+             pvalues = dat.coloc.merge_align$pval.prot,
+             N = dat.coloc.merge_align$samplesize.prot,
+             MAF = dat.coloc.merge_align$maf.prot,
+             snp = dat.coloc.merge_align$SNP,
+             sdY = 1 # external information
+            )
+
+D2 <- list(
+          type = "cc", # case-control trait
+          beta = dat.coloc.merge_align$beta.bp.aligned,
+          varbeta = dat.coloc.merge_align$se.bp^2, # note that this is standard error squared
+          pvalues = dat.coloc.merge_align$pval.bp,
+          N = dat.coloc.merge_align$samplesize.bp,
+          s = 0.07,
+          MAF = dat.coloc.merge_align$maf.bp,
+          snp = dat.coloc.merge_align$SNP
+          )
+```
+
+
+➡️ Run SuSie colocalisation analysis
+
+```{r}
+res.coloc = coloc.abf(D1, D2, p1 = 1e-4, p2 = 1e-4, p12 = 1e-5)
+res.coloc.info = 
+data.frame(t(res.coloc$summary),n_flipped=sum.flipped,file_name=x.gene)
+
+```

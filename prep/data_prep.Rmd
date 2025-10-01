@@ -74,9 +74,8 @@ write_tsv(Uniprot_ensembl,here::here('utils/uniprot_ensembl.tsv'))
 
 ```{r,format pQTL,echo=T,eval=F}
 annot_variant = read_tsv('data/assocvariants.annotated.txt.gz') %>%
-    dplyr::select(SNP=rsids,effect_allele=effectAllele,eaf=effectAlleleFreq,Name) %>%
-    mutate(n_allele = nchar(effect_allele)) %>%
-    filter(n_allele==1)
+    dplyr::select(eaf=effectAlleleFreq,Name) 
+
 ref.somalogic = read_tsv(here::here('utils/ref_somalogic.tsv')) %>%
     left_join(.,read_tsv(here::here('utils/uniprot_ensembl.tsv')),by='UniProt') %>%
     mutate(CHR=as.numeric(CHR))
@@ -124,23 +123,68 @@ list.files(here::here('data/deCODE_pQTL/'),full.names = T) %>%
   pblapply(format_pqtl_exposure,x.ref=ref.somalogic)
 ```
 
+UKB pQTL
 
-# Prepare SCZ sumstats
+```{r}
+format_pqtl_exposure <- function(f.x.dat,x.ref){
+  # Get annotation
+  Symbol = f.x.dat %>% basename %>% gsub('_adjAgeSexBatPC_InvNorm_22122022.txt.gz','',.) %>% gsub('Proteomics_SMP_PC0_','',.) 
+  x.seqid = Symbol %>% str_split(.,'_') %>% .[[1]] %>% head(2) %>% paste0(.,collapse='_')
+  x.ref = x.ref %>% filter(SeqId == x.seqid)
+  x.chr = x.ref$CHR
+  x.start = x.ref$start_pos
+  x.end = x.ref$end_pos
 
-Download SCZ sumstats [here]( https://pgc.unc.edu/for-researchers/download-results/)
+  # Output name
+  f.out = f.x.dat %>% basename %>% gsub('.txt.gz','_lo_annot.txt.gz',.)
 
-```{r, read MDD gwas sumstats,eval=F,echo=T}
-scz.gwas = read_tsv(here::here('data/daner_PGC_SCZ_w3_90_0518d_eur.gz'))
+  # Liftover from hg38 to hg19
+  x.dat.liftover = read_tsv(f.x.dat) %>%
+    dplyr::filter(Chrom!='chrX') %>%
+    mutate(CHR=Chrom %>% gsub('chr','',.) %>% as.numeric,
+           p=10^(-minus_log10_pval)) %>%
+    dplyr::select(SNP=rsids,CHR,BP=Pos,MAF=ImpMAF,A1=effectAllele,A2=otherAllele,beta=Beta,se=SE,p=Pval,N,Name) %>% 
+    MungeSumstats::liftover(sumstats_dt = ., 
+                            ref_genome = "hg38",
+                            convert_ref_genome = "hg19",end_col='BP') %>% 
+    mutate(Phenotype=Symbol) 
+
+  # Add variant annotation
+  x.dat.liftover_annot = x.dat.liftover %>%
+    dplyr::select(CHR,BP,SNP,effect_allele=A1,other_allele=A2,beta,se,pval=p,samplesize=N,Phenotype,Name) %>% 
+    dplyr::filter(CHR==x.chr) %>% 
+    left_join(.,annot_variant,by=c('Name')) %>%
+    dplyr::select(-Name)
+  
+  # Write preprocessed file
+  dir.create(here::here('./data/pQTL_hg19_annot/'), showWarnings = FALSE)
+  write_tsv(x.dat.liftover_annot,here::here(paste0('data/pQTL_hg19_annot/',f.out)))
+}
+
+list.files(here::here('data/deCODE_pQTL/'),full.names = T) %>% 
+  .[grep('.gz$',.)] %>% .[3] %>%
+  as.list %>% 
+  pblapply(format_pqtl_exposure,x.ref=ref.somalogic)
 ```
 
-```{r, rename MDD sumstats colnames,eval=F,echo=T}
-scz.gwas = scz.gwas %>% 
+
+# Prepare BP sumstats
+
+Download BP sumstats [here]( https://pgc.unc.edu/for-researchers/download-results/)
+
+```{r, read gwas sumstats,eval=F,echo=T}
+bp.gwas = fread('data/bip2024_eur_noUKB_no23andMe.gz')
+```
+
+```{r, rename sumstats colnames,eval=F,echo=T}
+bp.gwas = bp.gwas %>% 
  mutate(beta = log(OR)) %>% 
- dplyr::select(SNP,effect_allele=A1,other_allele=A2,
-                       eaf=FRQ_U_77258,beta,se=SE,pval=P,samplesize=Neff) %>% 
+ mutate(samplesize = Neff_half*2) %>%
+ dplyr::select(SNP,CHR,BP,effect_allele=A1,other_allele=A2,INFO,
+                       eaf=HRC_FRQ_A1,beta,se=SE,pval=P,samplesize) %>% 
          mutate(Phenotype='SCZ') 
 
-write_tsv(scz.gwas,here::here('data/scz_2022.tsv.gz'))
+write_tsv(bp.gwas,here::here('data/bp_2024.tsv.gz'))
 ```
 
 A preprocessed copy is stored on cloud.
