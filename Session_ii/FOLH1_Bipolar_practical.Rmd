@@ -241,7 +241,6 @@ dat.coloc.merge_align = dat.coloc.merge %>%
 sum.flipped = sum(dat.coloc.merge_align$flipped)
 ```
 
-
 ➡️ Format data for SuSie colocalisation analysis
 
 ```{r create D1 and D2 for susie colocalisation, message=F,warning=F,echo=T,eval=F}
