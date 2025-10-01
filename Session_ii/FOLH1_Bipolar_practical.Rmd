@@ -10,7 +10,9 @@ Welcome! This is the repository for the MQ-DATAMIND workshop, 'Proteomics and Me
 
 # Aim of the session
 
-We will use two-sample Mendelian randomisation to test causal relationship between protein abundance and schizophrenia. Through this tutorial, you will gain hands-on experience in handling and performing quality check on pQTL and other types of GWAS sumstats. You will also learn how to interpret Mendelian Randomisation findings.
+We will use two-sample Mendelian randomisation to test causal relationship between protein abundance and bipolar disorder. Through this tutorial, you will gain hands-on experience in handling and performing quality check on pQTL and other types of GWAS sumstats. You will also learn how to run and interpret Mendelian Randomisation findings, and how to consolidate causal evidence using colocalisation analysis.
+
+We will focus on one protein, FOLH1 (Folate hydrolase 1, also known as prostate-specific membrane antigen, PSMA), which has been implicated in bipolar disorder by a recent Mendelian randomisation study published in JAMA Psychiatry (Bhattacharyya U. et al. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study). We will use FOLH1 as an example to illustrate the analysis workflow, followed by functional lookup using OpenTargets. You can then apply the same workflow to other proteins of your interest.
 
 # Data used in this tutorial and relevant readings
 
@@ -68,14 +70,12 @@ library(coloc)
 
 ## Load data
 
-Let's first load schizophrenia GWAS sumstats and pQTL data
+Let's first load bipolar disorder GWAS sumstats and pQTL data
 
 ```{r load sumstats,message=F,warning=F,echo=T}
 dat.bp_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024.tsv.gz')
 
 dat.pqtl_FOLH1 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_5478_50_FOLH1_PSMA_10032022_lo_annot.txt.gz')
-
-dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz') %>% mutate(eaf = effectAlleleFreq)
 ```
 
 Let's load protein annotation and see which proteins we will be looking at
@@ -101,50 +101,51 @@ Here in this table:
 
 Our genome build is **GRCh37/hg19**.
 
-
+![](FOLH1.jpg)
 
 ```{r,eval=T,message=F,echo=T}
-gene_boundary = data.frame(lower=136912088,upper=137028479)
-gene_chr = 7
+gene_boundary = data.frame(lower=49166644,upper=49230154)
+gene_chr = 11
 ```
 
 Select cis region sumstats: 1Mb extended area of the gene region
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_pqtl_ptn = dat.pqtl_ptn %>% 
+dat.cis_pqtl_folh1 = dat.pqtl_folh1 %>% 
   dplyr::filter(CHR==gene_chr,BP > (gene_boundary$lower - 1000000), BP < (gene_boundary$upper + 1000000))
 ```
 
 Double check if data only includes cis region
 
 ```{r,eval=T,message=F,echo=T}
-range(dat.cis_pqtl_ptn$BP)
+range(dat.cis_pqtl_folh1$BP)
 ```
 
 ➡️ Keep common variants.
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(eaf < 0.995, eaf > 0.005)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(eaf < 0.995, eaf > 0.005)
 ```
 
-➡️ Keep variants that also present in the schizophrenia GWAS sumstats.
+➡️ Keep variants that also present in the bipolar disorder GWAS sumstats.
 
 ```{r,message=F,warning=F}
-dat.cis_pqtl_ptn = dat.cis_pqtl_ptn %>% filter(SNP %in% dat.scz_gwas$SNP)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(SNP %in% dat.bp_gwas$SNP)
 ```
 
 ➡️ Select genome-wide significant genetic instruments (pval \< 5e-8).
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_sig_pqtl_ptn = dat.cis_pqtl_ptn %>% 
+dat.cis_sig_pqtl_folh1 = dat.cis_pqtl_folh1 %>% 
   dplyr::filter(pval<5e-8)
 ```
 
 ➡️ Clump data using the 1000 Genome central European genotype data as reference.
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_sig_clump_pqtl_ptn = dat.cis_sig_pqtl_ptn %>% 
-  clump_data(.,clump_kb=1000,clump_r2=0.001)
+dat.cis_sig_clump_pqtl_folh1 = dat.cis_sig_pqtl_folh1 %>% 
+  clump_data(.,clump_kb=1000,clump_r2=0.001) %>%
+  as.data.frame
 ```
 
 If you see any error message, it is likely that you have not set up your R environment correctly. See this [tutorial](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md).
@@ -152,13 +153,13 @@ If you see any error message, it is likely that you have not set up your R envir
 ➡️ Reformat exposure data (pQTL)
 
 ```{r,warning=F,message=F}
-dat.exposure.ptn = format_data(dat.cis_sig_clump_pqtl_ptn,type='exposure')
+dat.exposure.folh1 = format_data(dat.cis_sig_clump_pqtl_folh1,type='exposure')
 ```
 
 ## QC and prepare schizophrenia sumstats (schizophrenia as outcome)
 
-```{r, format scz gwas,eval=T,message=F,echo=T}
-dat.scz.outcome = dat.scz_gwas %>% data.frame %>%
+```{r, format bp gwas,eval=T,message=F,echo=T}
+dat.bp.outcome = dat.bp_gwas %>% data.frame %>%
   format_data(.,type='outcome') 
 ```
 
@@ -167,7 +168,7 @@ dat.scz.outcome = dat.scz_gwas %>% data.frame %>%
 Harmonise exposure and outcome data. Select the top SNP for Wald ratio test.
 
 ```{r, data harmonisation,eval=T,echo=T}
-dat.mr =  harmonise_data(dat.exposure.ptn,dat.scz.outcome) %>%
+dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     arrange(pval.exposure) %>%
     head(n=1)
 ```
@@ -185,8 +186,6 @@ MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
 MR.wr %>% knitr::kable(.)
 ```
 
-
-
 ➡️ Use the script below to run MR Steiger directionality test. Here, we use it as a complementary analysis to Wald ratio.
 
 ```{r mr steiger, message=F,warning=F,echo=T,eval=F}
@@ -203,16 +202,15 @@ We will use the cis region pQTL data generated above for MR analyses for colocal
 ➡️ Get cis pqtl data and BP GWAS sumstats and reformat for data harmonisation
 
 ```{r prepare cis pqtl data, message=F,warning=F,echo=T,eval=F}
-dat.coloc.pqtl = dat.cis_pqtl_ptn %>%
+dat.coloc.pqtl = dat.cis_pqtl_folh1 %>%
       dplyr::select(SNP,CHR,BP,effect_allele.prot=effect_allele,other_allele.prot=other_allele,
                 eaf.prot=eaf,beta.prot=beta,se.prot=se,
                 pval.prot=pval,samplesize.prot=samplesize,Phenotype.prot=Phenotype) %>%
       mutate(CHR=as.numeric(CHR))
 ```
 
-
 ```{r prepare bp sumstats, message=F,warning=F,echo=T,eval=F}
-dat.coloc.bp = dat.scz_gwas %>%
+dat.coloc.bp = dat.bp_gwas %>%
       dplyr::select(SNP,CHR,BP,effect_allele.bp=effect_allele,other_allele.bp=other_allele,
                 eaf.bp=eaf,beta.bp=beta,se.bp=se,
                 pval.bp=pval,samplesize.bp=samplesize,Phenotype.bp=Phenotype)
@@ -243,7 +241,7 @@ dat.coloc.merge_align = dat.coloc.merge %>%
 sum.flipped = sum(dat.coloc.merge_align$flipped)
 ```
 
-```r sum.flipped``` SNPs with flipped alleles
+`r sum.flipped` SNPs with flipped alleles
 
 ➡️ Format data for SuSie colocalisation analysis
 
@@ -271,12 +269,11 @@ D2 <- list(
           )
 ```
 
-
-➡️ Run SuSie colocalisation analysis
+➡️ Run SuSie colocalisation analysis and check your results
 
 ```{r}
 res.coloc = coloc.abf(D1, D2, p1 = 1e-4, p2 = 1e-4, p12 = 1e-5)
-res.coloc.info = 
-data.frame(t(res.coloc$summary),n_flipped=sum.flipped,file_name=x.gene)
-
+res.coloc
 ```
+
+➡️ Visualise the results
