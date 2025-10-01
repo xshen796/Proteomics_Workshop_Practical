@@ -190,7 +190,7 @@ MR.wr %>% knitr::kable(.)
 
 ```{r mr steiger, message=F,warning=F,echo=T,eval=T}
 MR.dir = directionality_test(dat.mr)
-MR.dir %>% %>% knitr::kable(.)
+MR.dir %>% knitr::kable(.)
 ```
 
 # Colocalisation: consolidating causal evidence
