@@ -243,7 +243,7 @@ sum.flipped = sum(dat.coloc.merge_align$flipped)
 
 ➡️ Format data for SuSie colocalisation analysis
 
-```{r create D1 and D2 for susie colocalisation, message=F,warning=F,echo=T,eval=F}
+```{r create D1 and D2 for susie colocalisation, message=F,warning=F,echo=T,eval=T}
 D1 <- list(
              type = "quant", # quantitative trait
              beta = dat.coloc.merge_align$beta.prot.aligned,
