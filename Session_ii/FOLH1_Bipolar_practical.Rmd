@@ -22,7 +22,7 @@ Readings:
 
 -   **pQTL**: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
 
--   **Schizophrenia GWAS**: Trubetskoy, V., Pardiñas, A.F., Qi, T. et al. Mapping genomic loci implicates genes and synaptic biology in schizophrenia. Nature 604, 502–508 (2022). https://doi.org/10.1038/s41586-022-04434-5
+-   **Bipolar GWAS**: O’Connell, K.S., Koromina, M., van der Veen, T. et al. Genomics yields biological and phenotypic insights into bipolar disorder. Nature 639, 968–975 (2025). https://doi.org/10.1038/s41586-024-08468-9
 
 -   **Mendelian Randomisation analysis**: Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S, Chen CY, Lencz T. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study. JAMA Psychiatry. 2025 May 1;82(5):481-491. https://doi.org/10.1001/jamapsychiatry.2025.0033.
 
@@ -71,11 +71,11 @@ library(coloc)
 Let's first load schizophrenia GWAS sumstats and pQTL data
 
 ```{r load sumstats,message=F,warning=F,echo=T}
-dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
+dat.bp_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024.tsv.gz')
+
+dat.pqtl_FOLH1 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_5478_50_FOLH1_PSMA_10032022_lo_annot.txt.gz')
 
 dat.pqtl_ptn = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz') %>% mutate(eaf = effectAlleleFreq)
-
-dat.pqtl_lag3 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_9950_229_LAG3_LAG_3_10032022_lo_annot.txt.gz')
 ```
 
 Let's load protein annotation and see which proteins we will be looking at
@@ -97,11 +97,11 @@ Here in this table:
 
 ## QC and prepare pQTL data (protein as exposure)
 
-➡️ We need to select the cis region of ***PTN***. Find genomic locations for ***PTN*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=PTN&keywords=PTN)
+➡️ We need to select the cis region of ***FOLH1***. Find genomic locations for ***FOLH1*** [here](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOLH1&keywords=FOLH1)
 
 Our genome build is **GRCh37/hg19**.
 
-![PTN location](ptn_location.png)
+
 
 ```{r,eval=T,message=F,echo=T}
 gene_boundary = data.frame(lower=136912088,upper=137028479)
