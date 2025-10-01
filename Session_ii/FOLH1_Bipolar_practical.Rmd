@@ -75,7 +75,7 @@ Let's first load bipolar disorder GWAS sumstats and pQTL data
 ```{r load sumstats,message=F,warning=F,echo=T}
 dat.bp_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024.tsv.gz')
 
-dat.pqtl_FOLH1 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_5478_50_FOLH1_PSMA_10032022_lo_annot.txt.gz')
+dat.pqtl_folh1 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_5478_50_FOLH1_PSMA_10032022_lo_annot.txt.gz')
 ```
 
 Let's load protein annotation and see which proteins we will be looking at
