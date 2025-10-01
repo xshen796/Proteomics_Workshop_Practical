@@ -177,7 +177,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
 
 ➡️ Use the script below to run Wald ratio test. See result below:
 
-```{r,eval=F,echo=T}
+```{r,eval=T,echo=T}
 MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
                    b_out = dat.mr$beta.outcome,
                    se_exp = dat.mr$se.exposure,
@@ -188,7 +188,7 @@ MR.wr %>% knitr::kable(.)
 
 ➡️ Use the script below to run MR Steiger directionality test. Here, we use it as a complementary analysis to Wald ratio.
 
-```{r mr steiger, message=F,warning=F,echo=T,eval=F}
+```{r mr steiger, message=F,warning=F,echo=T,eval=T}
 MR.dir = directionality_test(dat.mr)
 MR.dir %>% %>% knitr::kable(.)
 ```
@@ -201,7 +201,7 @@ We will use the cis region pQTL data generated above for MR analyses for colocal
 
 ➡️ Get cis pqtl data and BP GWAS sumstats and reformat for data harmonisation
 
-```{r prepare cis pqtl data, message=F,warning=F,echo=T,eval=F}
+```{r prepare cis pqtl data, message=F,warning=F,echo=T,eval=T}
 dat.coloc.pqtl = dat.cis_pqtl_folh1 %>%
       dplyr::select(SNP,CHR,BP,effect_allele.prot=effect_allele,other_allele.prot=other_allele,
                 eaf.prot=eaf,beta.prot=beta,se.prot=se,
@@ -209,7 +209,7 @@ dat.coloc.pqtl = dat.cis_pqtl_folh1 %>%
       mutate(CHR=as.numeric(CHR))
 ```
 
-```{r prepare bp sumstats, message=F,warning=F,echo=T,eval=F}
+```{r prepare bp sumstats, message=F,warning=F,echo=T,eval=T}
 dat.coloc.bp = dat.bp_gwas %>%
       dplyr::select(SNP,CHR,BP,effect_allele.bp=effect_allele,other_allele.bp=other_allele,
                 eaf.bp=eaf,beta.bp=beta,se.bp=se,
@@ -218,13 +218,13 @@ dat.coloc.bp = dat.bp_gwas %>%
 
 ➡️ Merge pqtl and bp GWAS data
 
-```{r merge pqtl and bp data, message=F,warning=F,echo=T,eval=F}
+```{r merge pqtl and bp data, message=F,warning=F,echo=T,eval=T}
 dat.coloc.merge = left_join(dat.coloc.pqtl,dat.coloc.bp,by=c('SNP','CHR','BP')) 
 ```
 
 ➡️ Align alleles
 
-```{r coloc data harmonisation, message=F,warning=F,echo=T,eval=F}
+```{r coloc data harmonisation, message=F,warning=F,echo=T,eval=T}
 dat.coloc.merge_align = dat.coloc.merge %>% 
       mutate(ea.prot.aligned = ifelse(eaf.prot < 0.5, effect_allele.prot,other_allele.prot),
              nea.prot.aligned = ifelse(eaf.prot < 0.5, other_allele.prot,effect_allele.prot),
