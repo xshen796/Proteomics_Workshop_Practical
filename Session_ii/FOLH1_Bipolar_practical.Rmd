@@ -302,7 +302,7 @@ locus_plot(loc)
 **Bipolar disorder QTL in FOLH1 genomic region**
 
 ```{r,waning=F,message=F,echo=T}
-dat.plot.bp = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.bp,effect_allele=effect_allele.bp,p=pval.bp,beta=beta.bp,se=se.bp)
+dat.plot.bp = dat.coloc.bp %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.bp,effect_allele=effect_allele.bp,p=pval.bp,beta=beta.bp,se=se.bp)
 
 loc <- locus(gene = 'FOLH1', dat.plot.bp, flank = 1e6,ens_db = "EnsDb.Hsapiens.v75")
 
