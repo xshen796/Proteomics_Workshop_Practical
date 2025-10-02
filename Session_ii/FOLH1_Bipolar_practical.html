@@ -58,14 +58,12 @@ body {
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pbapply)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Hmisc)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoSampleMR)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coloc)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;locuszoomr&quot;</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EnsDb.Hsapiens.v75)</span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TwoSampleMR)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coloc)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;locuszoomr&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EnsDb.Hsapiens.v75)</span></code></pre></div>
 <h2 id="load-data">Load data</h2>
 <p>Let’s first load bipolar disorder GWAS sumstats and pQTL data</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dat.bp_gwas <span class="ot">=</span> <span class="fu">read_tsv</span>(<span class="st">&#39;https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024.tsv.gz&#39;</span>)</span>
@@ -143,7 +141,7 @@ body {
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat.mr <span class="ot">=</span>  <span class="fu">harmonise_data</span>(dat.exposure.folh1,dat.bp.outcome) <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(pval.exposure) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Harmonising 5478_50_FOLH1_PSMA (OHTdyH) and SCZ (AHGmn7)</code></pre>
+<pre><code>## Harmonising 5478_50_FOLH1_PSMA (WQCLn7) and SCZ (BxsKmA)</code></pre>
 <h2 id="run-two-sample-mendelian-randomisation-wald-ratio-and-steiger-directionality-tests">Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)</h2>
 <p>➡️ Use the script below to run Wald ratio test. See result below:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>MR.wr<span class="ot">=</span><span class="fu">mr_wald_ratio</span>(<span class="at">b_exp =</span> dat.mr<span class="sc">$</span>beta.exposure,</span>
@@ -181,8 +179,8 @@ body {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">OHTdyH</td>
-<td align="left">AHGmn7</td>
+<td align="left">WQCLn7</td>
+<td align="left">BxsKmA</td>
 <td align="left">5478_50_FOLH1_PSMA</td>
 <td align="left">SCZ</td>
 <td align="right">0.0071234</td>
