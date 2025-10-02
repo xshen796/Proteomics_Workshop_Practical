@@ -225,7 +225,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (RS2TcI) and SCZ (6oCv4e)
+    ## Harmonising 5478_50_FOLH1_PSMA (3KQoeZ) and SCZ (2hQeYj)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -262,7 +262,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| RS2TcI      | 6oCv4e     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| 3KQoeZ      | 2hQeYj     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 
@@ -520,3 +520,20 @@ schizophrenia is provided below:
 ``` r
 dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
 ```
+
+🤔 An even bigger challenge –
+
+How about looking at a different protein?
+
+Check ***PTN*** and see if it’s causal to bipolar
+disorder/schizophrenia:
+
+``` r
+dat.pqtl_ptn = https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz
+```
+
+# Final remarks
+
+------------------------------------------------------------------------
+
+Congratulations! 👏🎇 Here we are at the end of the tutorial.

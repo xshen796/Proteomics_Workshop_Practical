@@ -143,7 +143,7 @@ body {
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat.mr <span class="ot">=</span>  <span class="fu">harmonise_data</span>(dat.exposure.folh1,dat.bp.outcome) <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(pval.exposure) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Harmonising 5478_50_FOLH1_PSMA (RS2TcI) and SCZ (6oCv4e)</code></pre>
+<pre><code>## Harmonising 5478_50_FOLH1_PSMA (3KQoeZ) and SCZ (2hQeYj)</code></pre>
 <h2 id="run-two-sample-mendelian-randomisation-wald-ratio-and-steiger-directionality-tests">Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)</h2>
 <p>➡️ Use the script below to run Wald ratio test. See result below:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>MR.wr<span class="ot">=</span><span class="fu">mr_wald_ratio</span>(<span class="at">b_exp =</span> dat.mr<span class="sc">$</span>beta.exposure,</span>
@@ -181,8 +181,8 @@ body {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">RS2TcI</td>
-<td align="left">6oCv4e</td>
+<td align="left">3KQoeZ</td>
+<td align="left">2hQeYj</td>
 <td align="left">5478_50_FOLH1_PSMA</td>
 <td align="left">SCZ</td>
 <td align="right">0.0071234</td>
@@ -331,6 +331,13 @@ body {
 <p>Since FOLH1 is likely causal to bipolar disorder, is it possible that it may be causal to schizophrenia too?</p>
 <p>Explore this question on your own. GWAS summary statistics for schizophrenia is provided below:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dat.scz_gwas <span class="ot">=</span> <span class="fu">read_tsv</span>(<span class="st">&#39;https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz&#39;</span>)</span></code></pre></div>
+<p>🤔 An even bigger challenge –</p>
+<p>How about looking at a different protein?</p>
+<p>Check <em><strong>PTN</strong></em> and see if it’s causal to bipolar disorder/schizophrenia:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dat.pqtl_ptn <span class="ot">=</span> https<span class="sc">:</span><span class="er">//</span>storage.googleapis.com<span class="sc">/</span>mhp<span class="sc">-</span>proteomic<span class="sc">-</span>sumstats<span class="sc">/</span>Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz</span></code></pre></div>
+<h1 id="final-remarks">Final remarks</h1>
+<hr />
+<p>Congratulations! 👏🎇 Here we are at the end of the tutorial.</p>
 
 </body>
 </html>

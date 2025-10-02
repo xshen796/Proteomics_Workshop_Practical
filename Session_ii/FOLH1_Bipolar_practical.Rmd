@@ -384,3 +384,20 @@ Explore this question on your own. GWAS summary statistics for schizophrenia is 
 dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
 ```
 
+
+🤔 An even bigger challenge --
+
+How about looking at a different protein?
+
+Check ***PTN*** and see if it's causal to bipolar disorder/schizophrenia:
+
+```{r,echo=T,eval=F,message=F}
+dat.pqtl_ptn = https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_3045_72_PTN_PTN_10032022_lo_annot.txt.gz
+```
+
+
+# Final remarks
+
+------------------------------------------------------------------------
+
+Congratulations! 👏🎇 Here we are at the end of the tutorial. 
