@@ -223,7 +223,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (3HqF5x) and SCZ (GulawZ)
+    ## Harmonising 5478_50_FOLH1_PSMA (K0D9Un) and SCZ (NzuOy5)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -260,7 +260,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| 3HqF5x      | GulawZ     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| K0D9Un      | NzuOy5     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 

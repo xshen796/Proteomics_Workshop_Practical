@@ -141,7 +141,7 @@ body {
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat.mr <span class="ot">=</span>  <span class="fu">harmonise_data</span>(dat.exposure.folh1,dat.bp.outcome) <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(pval.exposure) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Harmonising 5478_50_FOLH1_PSMA (3HqF5x) and SCZ (GulawZ)</code></pre>
+<pre><code>## Harmonising 5478_50_FOLH1_PSMA (K0D9Un) and SCZ (NzuOy5)</code></pre>
 <h2 id="run-two-sample-mendelian-randomisation-wald-ratio-and-steiger-directionality-tests">Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)</h2>
 <p>➡️ Use the script below to run Wald ratio test. See result below:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>MR.wr<span class="ot">=</span><span class="fu">mr_wald_ratio</span>(<span class="at">b_exp =</span> dat.mr<span class="sc">$</span>beta.exposure,</span>
@@ -179,8 +179,8 @@ body {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">3HqF5x</td>
-<td align="left">GulawZ</td>
+<td align="left">K0D9Un</td>
+<td align="left">NzuOy5</td>
 <td align="left">5478_50_FOLH1_PSMA</td>
 <td align="left">SCZ</td>
 <td align="right">0.0071234</td>
