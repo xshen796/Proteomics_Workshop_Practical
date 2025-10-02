@@ -50,7 +50,7 @@ body {
 <p>💡See a quick guide here if you haven’t done so: <a href="https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md">URL</a></p>
 <h2 id="data-preparation-1">Data preparation</h2>
 <p><strong>See <a href="https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md">here</a> if you need more information on how we accessed and prepared the data for this tutorial.</strong></p>
-<h1 id="two-sample-mr-finding-causal-proteins-to-schizophrenia-using-cis-pqtl">Two-sample MR: finding causal proteins to schizophrenia using cis pQTL</h1>
+<h1 id="two-sample-mr-testing-causal-effect-of-glutamate-carboxypeptidase-2-encoded-by-folh1-to-bipolar-disorder-using-cis-pqtl">Two-sample MR: testing causal effect of Glutamate carboxypeptidase 2 (encoded by <em><strong>FOLH1</strong></em>) to bipolar disorder using cis pQTL</h1>
 <hr />
 <h2 id="load-r-packages">Load R packages</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rmarkdown)</span>
@@ -143,7 +143,7 @@ body {
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat.mr <span class="ot">=</span>  <span class="fu">harmonise_data</span>(dat.exposure.folh1,dat.bp.outcome) <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(pval.exposure) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="at">n=</span><span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Harmonising 5478_50_FOLH1_PSMA (3KQoeZ) and SCZ (2hQeYj)</code></pre>
+<pre><code>## Harmonising 5478_50_FOLH1_PSMA (OHTdyH) and SCZ (AHGmn7)</code></pre>
 <h2 id="run-two-sample-mendelian-randomisation-wald-ratio-and-steiger-directionality-tests">Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)</h2>
 <p>➡️ Use the script below to run Wald ratio test. See result below:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>MR.wr<span class="ot">=</span><span class="fu">mr_wald_ratio</span>(<span class="at">b_exp =</span> dat.mr<span class="sc">$</span>beta.exposure,</span>
@@ -181,8 +181,8 @@ body {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">3KQoeZ</td>
-<td align="left">2hQeYj</td>
+<td align="left">OHTdyH</td>
+<td align="left">AHGmn7</td>
 <td align="left">5478_50_FOLH1_PSMA</td>
 <td align="left">SCZ</td>
 <td align="right">0.0071234</td>

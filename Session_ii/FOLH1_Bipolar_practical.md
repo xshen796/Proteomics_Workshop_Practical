@@ -83,7 +83,7 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 if you need more information on how we accessed and prepared the data
 for this tutorial.**
 
-# Two-sample MR: finding causal proteins to schizophrenia using cis pQTL
+# Two-sample MR: testing causal effect of Glutamate carboxypeptidase 2 (encoded by ***FOLH1***) to bipolar disorder using cis pQTL
 
 ------------------------------------------------------------------------
 
@@ -225,7 +225,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (3KQoeZ) and SCZ (2hQeYj)
+    ## Harmonising 5478_50_FOLH1_PSMA (OHTdyH) and SCZ (AHGmn7)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -262,7 +262,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| 3KQoeZ      | 2hQeYj     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| OHTdyH      | AHGmn7     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 

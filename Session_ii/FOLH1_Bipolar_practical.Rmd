@@ -48,7 +48,7 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 
 **See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial.**
 
-# Two-sample MR: finding causal proteins to schizophrenia using cis pQTL
+# Two-sample MR: testing causal effect of Glutamate carboxypeptidase 2 (encoded by ***FOLH1***) to bipolar disorder using cis pQTL
 
 ------------------------------------------------------------------------
 
