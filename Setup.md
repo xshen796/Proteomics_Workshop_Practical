@@ -75,6 +75,10 @@ check_and_install_package("TwoSampleMR")
 check_and_install_package("coloc")
 check_and_install_package("GenomicsFeatures")
 check_and_install_package("rtracklayer")
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("rtracklayer")
 ```
 
 The code should be able to check if you have installed the packages
