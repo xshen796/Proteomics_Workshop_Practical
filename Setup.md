@@ -2,7 +2,7 @@ MQ-DATAMIND ECR workshop: Proteomics and Mental Health (environment set
 up)
 ================
 X Shen
-29 September, 2025
+02 October, 2025
 
 Welcome! This tutorial guides through the main steps to set up your
 local environment for the MQ-DATAMIND ECR workshop, ‘Proteomics and
@@ -78,6 +78,23 @@ check_and_install_package("coloc")
 The code should be able to check if you have installed the packages
 correctly. Contact Xueyi Shen (<xueyi.shen@ed.ac.uk>) if you run into
 any issue.
+
+## Optional packages for visualisation
+
+Use code below to install some optional packages for visualisation.
+These packages are used to visualise some of the results in the tutorial
+and won’t effect the analysis.
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("ensembldb")
+BiocManager::install("EnsDb.Hsapiens.v75")
+
+if (!requireNamespace("devtools", quietly = TRUE))
+  install.packages("devtools")
+devtools::install_github("myles-lewis/locuszoomr")
+```
 
 ## Set up your API token
 

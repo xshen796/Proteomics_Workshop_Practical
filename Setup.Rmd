@@ -25,7 +25,7 @@ In this page, scroll down and you will find two links for R and RStudio respecti
 
 Open RStudio, run the following commands in the console:
 
-```{r, warning=F,message=F}
+```{r, eval=F, warning=F,message=F}
 check_and_install_package <- function(package_name) {
   # Check if the package is already installed.
   if (!require(package_name, character.only = TRUE, quietly = TRUE)) {
@@ -70,6 +70,22 @@ check_and_install_package("coloc")
 ```
 
 The code should be able to check if you have installed the packages correctly. Contact Xueyi Shen (xueyi.shen@ed.ac.uk) if you run into any issue.
+
+## Optional packages for visualisation
+
+Use code below to install some optional packages for visualisation. These packages are used to visualise some of the results in the tutorial and won't effect the analysis.
+
+```{r, warning=F,message=F,eval=F}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("ensembldb")
+BiocManager::install("EnsDb.Hsapiens.v75")
+
+if (!requireNamespace("devtools", quietly = TRUE))
+  install.packages("devtools")
+devtools::install_github("myles-lewis/locuszoomr")
+```
+
 
 ## Set up your API token
 
