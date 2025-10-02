@@ -73,6 +73,8 @@ check_and_install_package("here")
 check_and_install_package("remotes")
 check_and_install_package("TwoSampleMR")
 check_and_install_package("coloc")
+check_and_install_package("Hmisc")
+check_and_install_package("kableExtra")
 ```
 
 The code should be able to check if you have installed the packages
