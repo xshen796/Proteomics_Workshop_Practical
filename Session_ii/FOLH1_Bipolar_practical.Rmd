@@ -278,17 +278,6 @@ res.coloc
 
 ➡️ Visualise the results
 
-```{r,waning=F,message=F,echo=T}
-
-dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
-
-loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e5,ens_db = "EnsDb.Hsapiens.v75")
-
-locus_plot(loc)
-
-#detach("EnsDb.Hsapiens.v75")
-```
-
 **pQTL in FOLH1 genomic region**
 
 ```{r,waning=F,message=F,echo=T}
@@ -315,12 +304,34 @@ locus_plot(loc)
 
 ### Gene lookup (GeneCards)
 
-➡️ Go to [GeneCards](https://www.genecards.org/)
+➡️ Go to [GeneCards](https://www.genecards.org/). Put 'FOLH1' in the search box to look up on the gene functions.
 
- 
+ ![](genecard_1.png)
+
+➡️ You'll be able to see the functions of this gene, protein encoded by this gene, phenotypes associated with the gene, functional pathways etc.
+
+Check this [URL](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOLH1)
+
+ ![](genecards_2.png)
 
 ### Mapping FOLH1 to drugs
 
 -   Source 1: OpenTargets
 
+    ➡️ Go to [OpenTargets Platform](https://platform.opentargets.org/)
+
+    ![](ot_1.png)
+
+    ➡️ You can check which traits were associated with this gene by going to the 'association' tab [URL](https://platform.opentargets.org/target/ENSG00000086205/associations).
+
+    ![](ot_2.png)
+
+    ➡️ Go to the 'profile' tab and check which drugs are associated with this gene [URL](https://platform.opentargets.org/target/ENSG00000086205).
+
+    ![](ot_3.png)
+
+    You can find other information, such as gene expression in multiple tissue types
+
+
 -   Source 2: DrugBank online
+

@@ -225,7 +225,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (4dOE1k) and SCZ (mTVFoE)
+    ## Harmonising 5478_50_FOLH1_PSMA (ak4Rdy) and SCZ (eOX34S)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -262,7 +262,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| 4dOE1k      | mTVFoE     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| ak4Rdy      | eOX34S     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 
@@ -381,20 +381,6 @@ res.coloc
 
 ➡️ Visualise the results
 
-``` r
-dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
-
-loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e5,ens_db = "EnsDb.Hsapiens.v75")
-
-locus_plot(loc)
-```
-
-![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
-
-``` r
-#detach("EnsDb.Hsapiens.v75")
-```
-
 **pQTL in FOLH1 genomic region**
 
 ``` r
@@ -405,7 +391,7 @@ loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e6,ens_db = "EnsDb.Hsapien
 locus_plot(loc)
 ```
 
-![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 **Bipolar disorder QTL in FOLH1 genomic region**
 
@@ -417,16 +403,46 @@ loc <- locus(gene = 'FOLH1', dat.plot.bp, flank = 1e6,ens_db = "EnsDb.Hsapiens.v
 locus_plot(loc)
 ```
 
-![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ## Interpreting the findings
 
 ### Gene lookup (GeneCards)
 
-➡️ Go to [GeneCards](https://www.genecards.org/)
+➡️ Go to [GeneCards](https://www.genecards.org/). Put ‘FOLH1’ in the
+search box to look up on the gene functions.
+
+![](genecard_1.png)
+
+➡️ You’ll be able to see the functions of this gene, protein encoded by
+this gene, phenotypes associated with the gene, functional pathways etc.
+
+Check this
+[URL](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOLH1)
+
+![](genecards_2.png)
 
 ### Mapping FOLH1 to drugs
 
 -   Source 1: OpenTargets
+
+    ➡️ Go to [OpenTargets Platform](https://platform.opentargets.org/)
+
+    ![](ot_1.png)
+
+    ➡️ You can check which traits were associated with this gene by
+    going to the ‘association’ tab
+    [URL](https://platform.opentargets.org/target/ENSG00000086205/associations).
+
+    ![](ot_2.png)
+
+    ➡️ Go to the ‘profile’ tab and check which drugs are associated with
+    this gene
+    [URL](https://platform.opentargets.org/target/ENSG00000086205).
+
+    ![](ot_3.png)
+
+    You can find other information, such as gene expression in multiple
+    tissue types
 
 -   Source 2: DrugBank online
