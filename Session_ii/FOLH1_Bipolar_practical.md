@@ -58,7 +58,7 @@ Readings:
     Mendelian Randomization Study. JAMA Psychiatry. 2025 May
     1;82(5):481-491. <https://doi.org/10.1001/jamapsychiatry.2025.0033>.
 
-# Data preparation
+# Environment set up and data used in this tutorial
 
 ------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 💡See a quick guide here if you haven’t done so:
 [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md)
 
-## Data preparation
+## Data used in this tutorial
 
 **See
 [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md)
@@ -223,7 +223,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (WQCLn7) and SCZ (BxsKmA)
+    ## Harmonising 5478_50_FOLH1_PSMA (3HqF5x) and SCZ (GulawZ)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -260,7 +260,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| WQCLn7      | BxsKmA     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| 3HqF5x      | GulawZ     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 

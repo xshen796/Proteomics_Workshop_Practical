@@ -28,7 +28,7 @@ Readings:
 
 -   **Mendelian Randomisation analysis**: Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S, Chen CY, Lencz T. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study. JAMA Psychiatry. 2025 May 1;82(5):481-491. https://doi.org/10.1001/jamapsychiatry.2025.0033.
 
-# Data preparation
+# Environment set up and data used in this tutorial
 
 ------------------------------------------------------------------------
 
@@ -44,9 +44,11 @@ git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
 
 💡See a quick guide here if you haven't done so: [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md)
 
-## Data preparation
+## Data used in this tutorial
 
 **See [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/prep/data_prep.md) if you need more information on how we accessed and prepared the data for this tutorial.**
+
+
 
 # Two-sample MR: testing causal effect of Glutamate carboxypeptidase 2 (encoded by ***FOLH1***) to bipolar disorder using cis pQTL
 
