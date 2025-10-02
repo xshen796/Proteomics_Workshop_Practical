@@ -11,10 +11,10 @@ Mental health’.
 ## Introduction
 
 All scripts are written in R. You can choose to run the practical on a
-jupyter notebook provided to you and run the analysis on Google Cloud,
-or you could download scripts to your local computer or cluster and
-perform analysis on your own device. This Setup tutorial shows you steps
-to set up or local environment.
+jupyter notebook provided to you and run the analysis on Posit Cloud, or
+you could download scripts to your local computer or cluster and perform
+analysis on your own device. This Setup tutorial shows you steps to set
+up or local environment.
 
 ## Download R and RStudio
 
@@ -44,7 +44,7 @@ check_and_install_package <- function(package_name) {
         install.packages(package_name, dependencies = TRUE)
       }else if(package_name=='TwoSampleMR'){
         library(remotes)
-        remotes::install_github("MRCIEU/")
+        remotes::install_github("MRCIEU/TwoSampleMR")
       }else if(package_name=='coloc'){
         library(remotes)
         remotes::install_github("chr1swallace/coloc@main",build_vignettes=TRUE)
