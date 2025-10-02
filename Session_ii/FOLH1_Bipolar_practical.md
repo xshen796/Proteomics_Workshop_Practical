@@ -223,7 +223,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (Yo3nGa) and SCZ (4SChH4)
+    ## Harmonising 5478_50_FOLH1_PSMA (BrMp0m) and SCZ (jaxNgo)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -235,43 +235,20 @@ MR.wr=mr_wald_ratio(b_exp = dat.mr$beta.exposure,
                    se_exp = dat.mr$se.exposure,
                    se_out = dat.mr$se.outcome)  
 
-MR.wr %>% knitr::kable(.)
+MR.wr 
 ```
 
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-
-|          x |
-|-----------:|
-| -0.1884534 |
-
-</td>
-<td>
-
-|         x |
-|----------:|
-| 0.0667967 |
-
-</td>
-<td>
-
-|        x |
-|---------:|
-| 0.004783 |
-
-</td>
-<td>
-
-|   x |
-|----:|
-|   1 |
-
-</td>
-</tr>
-</tbody>
-</table>
+    ## $b
+    ## [1] -0.1884534
+    ## 
+    ## $se
+    ## [1] 0.06679668
+    ## 
+    ## $pval
+    ## [1] 0.00478297
+    ## 
+    ## $nsnp
+    ## [1] 1
 
 ➡️ Use the script below to run MR Steiger directionality test. Here, we
 use it as a complementary analysis to Wald ratio.
@@ -283,7 +260,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| Yo3nGa      | 4SChH4     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| BrMp0m      | jaxNgo     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 
@@ -405,7 +382,116 @@ res.coloc
 ``` r
 library("locuszoomr")
 library(EnsDb.Hsapiens.v75)
+```
 
+    ## Loading required package: ensembldb
+
+    ## Loading required package: BiocGenerics
+
+    ## 
+    ## Attaching package: 'BiocGenerics'
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     combine, intersect, setdiff, union
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     IQR, mad, sd, var, xtabs
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    ##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    ##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    ##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    ##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, table,
+    ##     tapply, union, unique, unsplit, which.max, which.min
+
+    ## Loading required package: GenomicRanges
+
+    ## Loading required package: stats4
+
+    ## Loading required package: S4Vectors
+
+    ## 
+    ## Attaching package: 'S4Vectors'
+
+    ## The following objects are masked from 'package:data.table':
+    ## 
+    ##     first, second
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     first, rename
+
+    ## The following object is masked from 'package:utils':
+    ## 
+    ##     findMatches
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     expand.grid, I, unname
+
+    ## Loading required package: IRanges
+
+    ## 
+    ## Attaching package: 'IRanges'
+
+    ## The following object is masked from 'package:TwoSampleMR':
+    ## 
+    ##     trim
+
+    ## The following object is masked from 'package:data.table':
+    ## 
+    ##     shift
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     collapse, desc, slice
+
+    ## Loading required package: GenomeInfoDb
+
+    ## Loading required package: GenomicFeatures
+
+    ## Loading required package: AnnotationDbi
+
+    ## Loading required package: Biobase
+
+    ## Welcome to Bioconductor
+    ## 
+    ##     Vignettes contain introductory material; view with
+    ##     'browseVignettes()'. To cite Bioconductor, see
+    ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+    ## 
+    ## Attaching package: 'Biobase'
+
+    ## The following object is masked from 'package:Hmisc':
+    ## 
+    ##     contents
+
+    ## 
+    ## Attaching package: 'AnnotationDbi'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     select
+
+    ## Loading required package: AnnotationFilter
+
+    ## 
+    ## Attaching package: 'ensembldb'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     filter
+
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     filter
+
+``` r
 dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
 
 loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e5,ens_db = "EnsDb.Hsapiens.v75")
