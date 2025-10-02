@@ -225,7 +225,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (ak4Rdy) and SCZ (eOX34S)
+    ## Harmonising 5478_50_FOLH1_PSMA (fEX5S7) and SCZ (LBte02)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -262,7 +262,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| ak4Rdy      | eOX34S     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| fEX5S7      | LBte02     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 
@@ -442,7 +442,81 @@ Check this
 
     ![](ot_3.png)
 
-    You can find other information, such as gene expression in multiple
-    tissue types
+    You can find other interesting information, such as gene expression
+    in multiple tissue types. Feel free to explore this page.
 
 -   Source 2: DrugBank online
+
+    ➡️ Go to [DrugBank Online](https://go.drugbank.com/). Select your
+    input type before pressing search. For our analysis, let’s select
+    ‘targets’. Put the full protein name in the search box (not gene
+    name): Q04609 (UniProt) or Glutamate carboxypeptidase 2 (protein
+    full name)
+
+    ![](db_1.png)
+
+    If you are unsure what is the UniProt ID or protein full name, check
+    [UniProt database](https://www.uniprot.org/uniprotkb/Q04609/entry).
+
+    ![](Uniprot_1.png)
+
+    ➡️ You will be able to see a general description of the protein and
+    how this protein map to identifiers in other databases
+    [URL](https://go.drugbank.com/bio_entities/BE0000568?_gl=1*2got49*_up*MQ..*_ga*MTg2MzkwMjM1MS4xNzU5NDA3ODMz*_ga_DDLJ7EEV9M*czE3NTk0MDc4MzIkbzEkZzEkdDE3NTk0MDgyMzMkajYwJGwwJGgw).
+    You may wonder why there are so many identifiers linked with one
+    single protein. The main reason is because these proteins are
+    recorded separately in different databases. This identifier linkage
+    can help you map your results in other datasets (e.g. Chembl)
+
+    ![](db_2.png)
+
+    ➡️ Scroll down and you will see which drugs are linked with this
+    protein and what the relationship might be (e.g. drug
+    target/metaboliser/carrier).
+
+    ![](db_3.png)
+
+# Summary
+
+------------------------------------------------------------------------
+
+In this tutorial, we learned how to run two-sample MR using Wald ratio
+and Steiger directionality to identify potentially causal proteins to a
+disorder. We can use Susie colocalisation analysis to further confirm
+our findings. Finally, we shared a few methods to help us understand
+what we found.
+
+Note that it is good practise to consider results from multiple
+analyses, if possible, before drawing a conclusion.
+
+Many of the databases on drug-protein relationship continues to develop,
+and it is common to see different results. It would be helpful if you
+can thoroughly read the protocol paper of these databases before you
+decide which one is better.
+
+-   OpenTargets: Buniello, A. et al. (2025). Open Targets Platform:
+    facilitating therapeutic hypotheses building in drug discovery.
+    Nucleic Acids Research.
+
+-   DrugBank: Knox C, Wilson M, Klinger CM, et al. DrugBank 6.0: the
+    DrugBank Knowledgebase for 2024. Nucleic Acids Research. 2024 Jan
+    5;52(D1):D1265-D1275.
+
+# What next?
+
+------------------------------------------------------------------------
+
+🤔 Explore on your own –
+
+We know that bipolar disorder comorbids with schizophrenia and the two
+conditions are genetically correlated with schizophrenia.
+
+Since FOLH1 is likely causal to bipolar disorder, is it possible that it
+may be causal to schizophrenia too?
+
+Explore this question on your own. GWAS summary statistics for
+schizophrenia is provided below:
+
+``` r
+dat.scz_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/scz_2022.tsv.gz')
+```
