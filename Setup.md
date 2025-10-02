@@ -79,6 +79,7 @@ check_and_install_package("rtracklayer")
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("rtracklayer")
+BiocManager::install("GenomicAlignments")
 ```
 
 The code should be able to check if you have installed the packages
