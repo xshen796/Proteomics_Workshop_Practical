@@ -66,6 +66,8 @@ library(knitr)
 library(kableExtra)
 library(TwoSampleMR)
 library(coloc)
+library("locuszoomr")
+library(EnsDb.Hsapiens.v75)
 ```
 
 ## Load data
@@ -276,9 +278,7 @@ res.coloc
 
 ➡️ Visualise the results
 
-```{r}
-library("locuszoomr")
-library(EnsDb.Hsapiens.v75)
+```{r,waning=F,message=F,echo=T}
 
 dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
 
@@ -288,6 +288,28 @@ locus_plot(loc)
 
 #detach("EnsDb.Hsapiens.v75")
 ```
+
+**pQTL in FOLH1 genomic region**
+
+```{r,waning=F,message=F,echo=T}
+dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
+
+loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e6,ens_db = "EnsDb.Hsapiens.v75")
+
+locus_plot(loc)
+```
+
+**Bipolar disorder QTL in FOLH1 genomic region**
+
+```{r,waning=F,message=F,echo=T}
+dat.plot.bp = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.bp,effect_allele=effect_allele.bp,p=pval.bp,beta=beta.bp,se=se.bp)
+
+loc <- locus(gene = 'FOLH1', dat.plot.bp, flank = 1e6,ens_db = "EnsDb.Hsapiens.v75")
+
+locus_plot(loc)
+```
+
+
 
 ## Interpreting the findings
 
