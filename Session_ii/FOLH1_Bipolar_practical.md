@@ -2,7 +2,7 @@ MQ-DATAMIND ECR workshop: Proteomics and Mental Health (tutorial - local
 version)
 ================
 X Shen
-01 October, 2025
+02 October, 2025
 
 Welcome! This is the repository for the MQ-DATAMIND workshop,
 ‘Proteomics and Mental Health’ (Practical Session II)
@@ -169,14 +169,14 @@ range(dat.cis_pqtl_folh1$BP)
 ➡️ Keep common variants.
 
 ``` r
-dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(eaf < 0.995, eaf > 0.005)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% dplyr::filter(eaf < 0.995, eaf > 0.005)
 ```
 
 ➡️ Keep variants that also present in the bipolar disorder GWAS
 sumstats.
 
 ``` r
-dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(SNP %in% dat.bp_gwas$SNP)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% dplyr::filter(SNP %in% dat.bp_gwas$SNP)
 ```
 
 ➡️ Select genome-wide significant genetic instruments (pval \< 5e-8).
@@ -223,7 +223,7 @@ dat.mr =  harmonise_data(dat.exposure.folh1,dat.bp.outcome) %>%
     head(n=1)
 ```
 
-    ## Harmonising 5478_50_FOLH1_PSMA (3V7nSR) and SCZ (EsqdY6)
+    ## Harmonising 5478_50_FOLH1_PSMA (Yo3nGa) and SCZ (4SChH4)
 
 ## Run two-sample Mendelian randomisation (Wald ratio and Steiger directionality tests)
 
@@ -283,7 +283,7 @@ MR.dir %>% knitr::kable(.)
 
 | id.exposure | id.outcome | exposure           | outcome | snp_r2.exposure | snp_r2.outcome | correct_causal_direction | steiger_pval |
 |:------------|:-----------|:-------------------|:--------|----------------:|---------------:|:-------------------------|-------------:|
-| 3V7nSR      | EsqdY6     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
+| Yo3nGa      | 4SChH4     | 5478_50_FOLH1_PSMA | SCZ     |       0.0071234 |       5.81e-05 | TRUE                     |            0 |
 
 # Colocalisation: consolidating causal evidence
 
@@ -330,7 +330,7 @@ dat.coloc.merge_align = dat.coloc.merge %>%
              maf.bp = ifelse(eaf.bp < 0.5, eaf.bp,1-eaf.bp),
              beta.bp.aligned = ifelse(eaf.bp < 0.5, beta.bp,-beta.bp)) %>% 
       mutate(flipped = ea.prot.aligned!=ea.bp.aligned) %>% 
-      filter(!is.na(pval.bp),maf.bp>0.001) %>% 
+      dplyr::filter(!is.na(pval.bp),maf.bp>0.001) %>% 
       .[!duplicated(.$SNP),]
 
 sum.flipped = sum(dat.coloc.merge_align$flipped)
@@ -402,9 +402,34 @@ res.coloc
 
 ➡️ Visualise the results
 
+``` r
+library("locuszoomr")
+library(EnsDb.Hsapiens.v75)
+
+dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
+
+loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e5,ens_db = "EnsDb.Hsapiens.v75")
+```
+
+    ## FOLH1, chromosome 11, position 49068187 to 49330222
+
+    ## 835 SNPs/datapoints
+
+``` r
+locus_plot(loc)
+```
+
+![](FOLH1_Bipolar_practical_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+#detach("EnsDb.Hsapiens.v75")
+```
+
 ## Interpreting the findings
 
 ### Gene lookup (GeneCards)
+
+➡️ Go to [GeneCards](https://www.genecards.org/)
 
 ### Mapping FOLH1 to drugs
 

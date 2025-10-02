@@ -124,13 +124,13 @@ range(dat.cis_pqtl_folh1$BP)
 ➡️ Keep common variants.
 
 ```{r,eval=T,message=F,echo=T}
-dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(eaf < 0.995, eaf > 0.005)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% dplyr::filter(eaf < 0.995, eaf > 0.005)
 ```
 
 ➡️ Keep variants that also present in the bipolar disorder GWAS sumstats.
 
 ```{r,message=F,warning=F}
-dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% filter(SNP %in% dat.bp_gwas$SNP)
+dat.cis_pqtl_folh1 = dat.cis_pqtl_folh1 %>% dplyr::filter(SNP %in% dat.bp_gwas$SNP)
 ```
 
 ➡️ Select genome-wide significant genetic instruments (pval \< 5e-8).
@@ -235,7 +235,7 @@ dat.coloc.merge_align = dat.coloc.merge %>%
              maf.bp = ifelse(eaf.bp < 0.5, eaf.bp,1-eaf.bp),
              beta.bp.aligned = ifelse(eaf.bp < 0.5, beta.bp,-beta.bp)) %>% 
       mutate(flipped = ea.prot.aligned!=ea.bp.aligned) %>% 
-      filter(!is.na(pval.bp),maf.bp>0.001) %>% 
+      dplyr::filter(!is.na(pval.bp),maf.bp>0.001) %>% 
       .[!duplicated(.$SNP),]
 
 sum.flipped = sum(dat.coloc.merge_align$flipped)
@@ -276,9 +276,26 @@ res.coloc
 
 ➡️ Visualise the results
 
+```{r}
+library("locuszoomr")
+library(EnsDb.Hsapiens.v75)
+
+dat.plot.folh1 = dat.coloc.pqtl %>% dplyr::select(chrom=CHR,pos=BP,rsid=SNP,other_allele=other_allele.prot,effect_allele=effect_allele.prot,p=pval.prot,beta=beta.prot,se=se.prot)
+
+loc <- locus(gene = 'FOLH1', dat.plot.folh1, flank = 1e5,ens_db = "EnsDb.Hsapiens.v75")
+
+locus_plot(loc)
+
+#detach("EnsDb.Hsapiens.v75")
+```
+
 ## Interpreting the findings
 
 ### Gene lookup (GeneCards)
+
+➡️ Go to [GeneCards](https://www.genecards.org/)
+
+ 
 
 ### Mapping FOLH1 to drugs
 
