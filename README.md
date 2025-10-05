@@ -6,7 +6,7 @@ The workshop is organised jointly by Mental Health Platform, MQ and DATAMIND. Th
 ## Course information
 Date: 9 October 2025, 12pm - 5pm;
 
-Location: ERoom 2.55, Edinburgh Futures Institute, 1 Lauriston Place Edinburgh EH3 9EF;
+Location: Room 2.55, Edinburgh Futures Institute, 1 Lauriston Place Edinburgh EH3 9EF;
 
 [Workshop programme](https://www.mentalhealthplatform.ac.uk/event/ecr-workshop-2025)
 
