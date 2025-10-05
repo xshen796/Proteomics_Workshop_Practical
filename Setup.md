@@ -108,6 +108,14 @@ devtools::install_github("myles-lewis/locuszoomr")
 See a quick guide
 [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/Setup_APItoken.md)
 
+## Clone this respository (optional)
+
+Clone this repository to save a copy of all the scripts in your local
+device. Note that this is optional for the workshop, but you can feel
+free to explore this option in your own time. We recommend using the
+cloud service (see
+[README](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main)).
+
 ## Readings
 
 Optional readings on the datasets we will use:
@@ -139,29 +147,6 @@ Readings:
     proteins linked to major cardiac diseases and highlight potential
     therapeutic targets using UK Biobank data.
 
-    -   Kang J, Yang L, Jia T, Zhang W et al. Plasma proteomics
-        identifies proteins and pathways associated with incident
-        depression in 46,165 adults. Sci Bull (Beijing). 2025 Feb
-        26;70(4):573-586. <https://doi.org/10.1016/j.scib.2024.09.041>
-
-    Example of method integration (depression): This study integrates
-    observational analyses of proteomic, brain imaging, and
-    stress-related data with genetic methods such as Mendelian
-    randomisation to identify proteins linked to the onset of depression
-    using UK Biobank data.
-
-    -   Korthauer, K., Kimes, P.K., Duvallet, C. et al. A practical
-        guide to methods controlling false discoveries in computational
-        biology. Genome Biol 20, 118 (2019).
-        <https://doi.org/10.1186/s13059-019-1716-1>
-
-    Statistical methods: This paper systematically compares classic and
-    modern false discovery rate (FDR) methods, showing that
-    incorporating informative covariates can increase power without
-    sacrificing error control. It is useful for researchers because it
-    provides practical guidance on choosing FDR-controlling approaches
-    best suited to their data and study design.
-
 -   Session II:
 
     -   Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D,
@@ -169,8 +154,3 @@ Readings:
         Psychopathology and Cognition: A Mendelian Randomization Study.
         JAMA Psychiatry. 2025 May 1;82(5):481-491.
         <https://doi.org/10.1001/jamapsychiatry.2025.0033>.
-
-## What next
-
-Additional scripts and mock data will become available prior to the
-workshop.
