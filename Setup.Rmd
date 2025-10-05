@@ -104,6 +104,9 @@ See a quick guide [here](https://github.com/xshen796/Proteomics_Workshop_Practic
 
 Clone this repository to save a copy of all the scripts in your local device. Note that this is optional for the workshop, but you can feel free to explore this option in your own time. We recommend using the cloud service (see [README](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main)). 
 
+```{r,eval=F,echo=T}
+git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
+```
 
 ## Readings
 
