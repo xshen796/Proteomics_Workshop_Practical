@@ -1,4 +1,4 @@
-# Mental Health Platform ECR Workshop 2025: Proteomics and Mental Health.
+# Mental Health Platform ECR Workshop 2025: Proteomics and Mental Health
 -------------------------------------------------------------------------
 
 The workshop is organised jointly by Mental Health Platform, MQ and DATAMIND. This repository contains tutorial and scripts for the workshop.
