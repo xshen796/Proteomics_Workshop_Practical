@@ -1,5 +1,5 @@
 ---
-title: "proteomics_paractical_1"
+title: "Set up Posit Cloud"
 author: "Ruta Margelyte"
 date: "2025-09-22"
 output:
