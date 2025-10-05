@@ -1,4 +1,4 @@
-proteomics_paractical_1
+Set up Posit Cloud
 ================
 Ruta Margelyte
 2025-09-22
