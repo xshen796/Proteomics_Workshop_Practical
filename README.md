@@ -10,6 +10,10 @@ Location: Edinburgh Futures Institute, The University of Edinburgh, Room 2.55, 1
 
 Workshop programme
 
+## Course slides
+
+Access slides from this [URL](https://drive.google.com/drive/folders/1TNdcmP4R9RsksVIoIIETWrmNqkz16mbz?usp=sharing)
+
 ## A quick start
 
 -   Setup your local environment: click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup.md)
