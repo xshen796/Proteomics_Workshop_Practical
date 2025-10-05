@@ -1,7 +1,7 @@
-# MQ-DATAMIND Workshop: Proteomics and Mental Health. Practical session II
+# Mental Health Platform ECR Workshop 2025: Proteomics and Mental Health.
 -------------------------------------------------------------------------
 
-This repository contains tutorial and scripts for the DATAMIND-MQ proteomics workshop - practical session II
+The workshop is organised jointly by Mental Health Platform, MQ and DATAMIND. This repository contains tutorial and scripts for the workshop.
 
 ## Course information
 Date: 9 October 2025, 12pm - 5pm;
