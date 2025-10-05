@@ -239,7 +239,7 @@ dat.coloc.merge_align = dat.coloc.merge %>%
 sum.flipped = sum(dat.coloc.merge_align$flipped)
 ```
 
-➡️ Format data for SuSie colocalisation analysis
+➡️ Format data for colocalisation analysis
 
 ```{r create D1 and D2 for susie colocalisation, message=F,warning=F,echo=T,eval=T}
 D1 <- list(
@@ -294,6 +294,19 @@ loc <- locus(gene = 'FOLH1', dat.plot.bp, flank = 1e6,ens_db = "EnsDb.Hsapiens.v
 locus_plot(loc)
 ```
 
+## Advanced sensitivity analyses (highly optional for beginners)
+
+---
+
+### Sensitivity analysis on a range of prior probabilities
+
+In the 'coloc' R package, there is an embedded function that can help you test how your prior settings might influence your results.
+
+Here in this demo, we used the default pior probability setting at 1e-5 (most common prior). Run the code below and you'll see how the results will vary based on the chosen prior probability.
+
+```{r,waning=F,message=F,echo=T}
+sensitivity(res.coloc,"H4 > 0.7")
+```
 
 
 ## Interpreting the findings
