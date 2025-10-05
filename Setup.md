@@ -116,6 +116,10 @@ free to explore this option in your own time. We recommend using the
 cloud service (see
 [README](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main)).
 
+``` r
+git clone https://github.com/xshen796/Proteomics_Workshop_Practical.git
+```
+
 ## Readings
 
 Optional readings on the datasets we will use:
