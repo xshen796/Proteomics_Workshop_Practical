@@ -6,24 +6,40 @@ This repository contains tutorial and scripts for the DATAMIND-MQ proteomics wor
 ## Course information
 Date: 9 October 2025, 12pm - 5pm;
 
-Location: Edinburgh Futures Institute, The University of Edinburgh, Room 2.55, 1 Lauriston Place Edinburgh EH3 9EF;
+Location: ERoom 2.55, Edinburgh Futures Institute, 1 Lauriston Place Edinburgh EH3 9EF;
 
-Workshop programme
+[Workshop programme](https://www.mentalhealthplatform.ac.uk/event/ecr-workshop-2025)
 
 ## Course slides
 
 Access slides from this [URL](https://drive.google.com/drive/folders/1TNdcmP4R9RsksVIoIIETWrmNqkz16mbz?usp=sharing)
 
-## A quick start
+## Set up preparation
 
--   Setup your local environment: click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup.md)
+We recommend you to use Posit Cloud (for Session I) and Google Colab (for Session II). 
 
--   Setup your Google Colab account (a hassle-free way): click [here](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). Follow the prompts to sign up a Google account and log in.
+-   Setup your Posit Cloud account and make your own copy of the R project for Session I (recommended). Follow instructions [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_i/Setup_posit_cloud.md).
+
+-   Setup your Google Colab account (recommended) for Session II: click [here](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). Follow the prompts to sign up a Google account and log in.
+
+-   Setup your local environment (optional, in your own time): click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup.md)
 
 ## Practical tutorial
 
--   See our tutorial following the paper by Bhattacharyya et al. published in JAMA Psychiatry, 2025. Click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/FOLH1_Bipolar_practical.md) to access the step-by-step tutorial.
+### Session I
 
--   An online cloud version can be found [here](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing) (a hassle-free way).
+-   Facilitators: Dr Ruta Margelyte and Dr Christina Dardani (60 mins)
 
+-   Access project online via Posit Cloud: [URL](https://posit.cloud/content/10981075)
+
+-   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_ii)
+
+
+### Session II
+
+-   Facilitators: Dr Xueyi Shen and Dr Christina Dardani (60 mins)
+
+-   Access project online via Posit Cloud: [URL](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). We will follow the paper by Bhattacharyya et al. published in JAMA Psychiatry, 2025.
+
+-   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_i)
 
