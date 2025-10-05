@@ -14,7 +14,7 @@ Location: ERoom 2.55, Edinburgh Futures Institute, 1 Lauriston Place Edinburgh E
 
 Access slides from this [URL](https://drive.google.com/drive/folders/1TNdcmP4R9RsksVIoIIETWrmNqkz16mbz?usp=sharing)
 
-## Set up preparation
+## Set up
 
 We recommend you to use Posit Cloud (for Session I) and Google Colab (for Session II). 
 
@@ -39,7 +39,7 @@ We recommend you to use Posit Cloud (for Session I) and Google Colab (for Sessio
 
 -   Facilitators: Dr Xueyi Shen and Dr Christina Dardani (60 mins)
 
--   Access project online via Posit Cloud: [URL](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). We will follow the paper by Bhattacharyya et al. published in JAMA Psychiatry, 2025.
+-   Access project online via Google Colab: [URL](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). We will follow the paper by Bhattacharyya et al. published in JAMA Psychiatry, 2025.
 
 -   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_i)
 
