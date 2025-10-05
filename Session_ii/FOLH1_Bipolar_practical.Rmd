@@ -22,10 +22,6 @@ We will use publicly available summary statistics from the [Psychiatric Genomic 
 
 Readings:
 
--   **pQTL**: Eldjarn, G.H., Ferkingstad, E., Lund, S.H. et al. Large-scale plasma proteomics comparisons through genetics and disease associations. Nature 622, 348–358 (2023). https://doi.org/10.1038/s41586-023-06563-x
-
--   **Bipolar GWAS**: O’Connell, K.S., Koromina, M., van der Veen, T. et al. Genomics yields biological and phenotypic insights into bipolar disorder. Nature 639, 968–975 (2025). https://doi.org/10.1038/s41586-024-08468-9
-
 -   **Mendelian Randomisation analysis**: Bhattacharyya U, John J, Lam M, Fisher J, Sun B, Baird D, Burgess S, Chen CY, Lencz T. Circulating Blood-Based Proteins in Psychopathology and Cognition: A Mendelian Randomization Study. JAMA Psychiatry. 2025 May 1;82(5):481-491. https://doi.org/10.1001/jamapsychiatry.2025.0033.
 
 # Environment set up and data used in this tutorial
@@ -66,7 +62,7 @@ library(here)
 library(knitr)
 library(TwoSampleMR)
 library(coloc)
-library("locuszoomr")
+library(locuszoomr)
 library(EnsDb.Hsapiens.v75)
 ```
 
@@ -75,7 +71,7 @@ library(EnsDb.Hsapiens.v75)
 Let's first load bipolar disorder GWAS sumstats and pQTL data
 
 ```{r load sumstats,message=F,warning=F,echo=T}
-dat.bp_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024.tsv.gz')
+dat.bp_gwas = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/bp_2024_chr7_11.tsv.gz')
 
 dat.pqtl_folh1 = read_tsv('https://storage.googleapis.com/mhp-proteomic-sumstats/Proteomics_SMP_PC0_5478_50_FOLH1_PSMA_10032022_lo_annot.txt.gz')
 ```
