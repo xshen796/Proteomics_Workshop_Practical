@@ -1,0 +1,1034 @@
+
+# MQ-DATAMIND Workshop.
+# 
+# Session 1: Proteomic Biomarkers of Psychiatric Conditions
+# 
+# Practical exercise including Q&A: Proteomics, How? Data preparation, statistical approach, data visualisation, and interpretation
+# 
+# Tutorial by: Ruta Margelyte
+# 
+# Email: [ruta.margelyte@bristol.ac.uk]
+# 
+# In this tutorial, we focus on observational analyses using individual-level cohort data, integrating proteomics measurements 
+# with phenotypic information. Participants will learn how to explore datasets, examine protein–outcome associations, 
+# visualise complex relationships, and interpret findings in the context of human disease.
+# 
+# Aims:
+#   
+# Understand how to manage and prepare high-dimensional proteomics data in a cohort setting.
+# 
+# Explore associations between protein levels and clinical outcomes using descriptive and regression analyses.
+# 
+# Visualise protein-disease relationships effectively.
+# 
+# Interpret statistical results, develop awareness of sensitivity analyses and follow-up considerations.
+
+
+# Preliminary steps
+# 
+# If you haven't already installed the necessary packages with libraries, please do so! For this practical, you will need:
+
+
+    # install.packages("rmarkdown")
+    # install.packages("Hmisc")
+    # install.packages("dplyr")
+    # install.packages("stringr")
+    # install.packages("tidyr")
+    # install.packages("ggplot2")
+    # install.packages("survival")
+    # install.packages("broom")
+    # install.packages("lspline")
+    # install.packages("patchwork")
+    # install.packages("UpSetR")
+    
+    library(Hmisc)
+    library(rmarkdown)
+    library(dplyr)
+    library(stringr) 
+    library(tidyr)
+    library(ggplot2)
+    library(survival)
+    library(broom)
+    library(lspline)
+    library(patchwork)
+    library(UpSetR)
+    
+    #options(max.print = 1000000)  #maximum number of character to print in console
+    options(scipen = 9999) #no scientific notations for large numbers
+    #rm(list = ls()) # clean all objects from environment
+
+
+
+# Part 1 - Load and explore data
+# 
+# 1. Load data
+# 
+# Data set was generated using model-based imputations and Gaussian perturbations using a randomly selected subset from UK Biobank.
+
+    #getwd() #print out current directory
+    
+    load("df.RData")
+    
+    # #datasets to be derived in this tutorial:
+    # load("associations/protein_depression_adj1.RData")
+    # load("associations/protein_depression_adj2.RData")
+    # load("associations/protein_depression_prev_adj1.RData")
+    # load("associations/protein_depression_prev_adj2.RData")
+    # load("associations/protein_anxiety_adj1.RData")
+    # load("associations/protein_anxiety_adj2.RData")
+
+
+# 2. Summarise dataset and check missingness
+
+    #dim(df)        # Dimensions (rows, columns)
+    nrow(df)        # Number of rows
+    ncol(df)        # Number of columns
+    sum(is.na(df))  # Missing data
+    head(df)        # Print out top rows
+
+# 3. Explore phenotypic data (excluding proteins)
+# 
+# Row identifier (integer) for individual level data.
+# 
+# Two psychiatric diagnoses (anxiety and depression) split into incident and prevalent cases (binary) with regards to baseline assessment 
+# & blood collection, and including time to censoring (days) by either date of diagnosis, death, or end of data source coverage.
+# 
+# Five phenotypic variables collected at baseline - Age (years), Sex (Female, Male), 
+# Townsend Deprivation Index (TDI) score (lower = more affluent), BMI (kg/m2), Smoking (Current, Previous, Never).
+#     
+# Covariate list is not exhaustive, we have chose several covariates that are reported 
+# to be associated with either or both protein levels and diagnoses of interest.
+
+    str(df[,1:12])         # column names and types
+    summary(df[,1:12])     # data summary
+
+# 4. Explore protein data
+# 
+# Olink 3072 Cardiometabolic panel containing blood plasma protein levels (NPX values) collected at baseline assessment.
+#     
+# NPX (Normalised Protein eXpression) values are relative protein abundance measurements. 
+# They are reported on a log2 scale and have undergone internal normalisation and inter-plate control correction, 
+# allowing comparison across samples within a study. NPX values are relative, not absolute concentrations, 
+# meaning higher NPX indicates higher protein levels, but the values cannot be directly converted to standard units like pg/mL.
+
+    cat("\nNumber of proteins\n")
+    ncol(df[, 13:378])        # number of proteins
+    
+    cat("\nExample summary of 3 proteins\n")
+    str(df[,13:15])           # column names and types
+    summary(df[, c(13:15)])   # data summary
+    
+# 5. Summarise diagnoses - prevalent at baseline assessment
+
+    cat("\nPrevalent depression - n and %\n")
+    table(df$depression_prevalent)
+    round(prop.table(table(df$depression_prevalent)), 3)
+    
+    cat("\nPrevalent anxiety - n and %\n")     
+    table(df$anxiety_prevalent)
+    round(prop.table(table(df$anxiety_prevalent)), 3)
+    
+    cat("\nOverlap between prevalent conditions\n")         
+    addmargins(table(df$depression_prevalent, df$anxiety_prevalent))
+
+
+# 6. Summarise diagnoses - incident after baseline assessment
+
+    cat("\nIncident depression - n and %\n")
+    table(df$depression_incident)
+    round(prop.table(table(df$depression_incident)), 3)
+    
+    cat("\nIncident anxiety - n and %\n")       
+    table(df$anxiety_incident)
+    round(prop.table(table(df$anxiety_incident)), 3)
+            
+    cat("\nOverlap between incident conditions\n")    
+    addmargins(table(df$depression_incident, df$anxiety_incident))
+    
+    cat("\nTime to diagnosis for incident depression cases in years\n")   
+    summary(df$depression_ttd[df$depression_incident == 1]/365.5)
+    
+    cat("\nTime to diagnosis for incident anxiety cases in years\n") 
+    summary(df$anxiety_ttd[df$depression_incident == 1]/365.5)      
+
+# 7. Plot histograms for time to diagnosis in incident cases
+
+    p1<-ggplot(df%>% filter(depression_incident == 1), aes(x = depression_ttd)) +
+    geom_histogram(bins = 20, fill = "steelblue", color = "black") +
+    theme_minimal() +
+    labs(title = "Time to depression diagnosis", x = "Days", y = "Count")
+            
+            
+    p2<-ggplot(df%>% filter(anxiety_incident == 1), aes(x = anxiety_ttd)) +
+    geom_histogram(bins = 20, fill = "steelblue", color = "black") +
+    theme_minimal() +
+    labs(title = "Time to anxiety diagnosis", x = "Days", y = "Count")
+    
+    p1 | p2
+    
+    rm(p1)
+    rm(p2)
+
+
+# 8. Summarise covariates by incident diagnosis status
+# 
+# Further practical will be focused on incident depression diagnosis.
+
+# Summary of covariates by incident depression status - means and SD for continous variables with p-values from two sample t-test, 
+# n and % for categorical variables with p-values from Chi-squared test.
+
+    summary_tbl <- df %>% 
+      filter(depression_prevalent == 0) %>%   #exclude prevalent cases
+      group_by(depression_incident) %>%       #group by incidence status
+      
+      summarise(
+        n = as.character(n()),
+        
+        age = paste0(round(mean(age, na.rm=TRUE),1), " (±", round(sd(age, na.rm=TRUE),1), ")"),
+        
+        bmi = paste0(round(mean(bmi, na.rm=TRUE),1), " (±", round(sd(bmi, na.rm=TRUE),1), ")"),
+        
+        tdi = paste0(round(mean(tdi, na.rm=TRUE),1), " (±", round(sd(tdi, na.rm=TRUE),1), ")"),
+        
+        sex_female = paste0(sum(sex=="Female"), " (", round(100*mean(sex=="Female"),1), "%)"),
+        
+        smoking_current = paste0(sum(smokingstatus=="Current"), " (", round(100*mean(smokingstatus=="Current"),1), "%)"),
+        
+        smoking_never = paste0(sum(smokingstatus=="Never"), " (", round(100*mean(smokingstatus=="Never"),1), "%)"),
+        
+        smoking_previous = paste0(sum(smokingstatus=="Previous"), " (", round(100*mean(smokingstatus=="Previous"),1), "%)")
+      )%>%
+      
+      pivot_longer(cols = -depression_incident, names_to = "category", values_to = "value") %>%
+      mutate(variable = str_extract(category, "^[^_]+"))  %>%
+      pivot_wider(names_from = depression_incident, values_from = value) %>%
+      rename(not_incident = `0`, incident = `1`)
+    
+    # P-values
+    
+    df_summary <- df %>%
+      filter(depression_prevalent == 0)
+    
+    cont_vars <- c("age", "bmi", "tdi") # Continuous vars
+    cat_vars  <- c("sex", "smokingstatus") # Categorical vars
+    
+    p_cont <- lapply(cont_vars, function(v) {
+      t.test(df_summary[[v]] ~ df_summary$depression_incident) %>%
+        tidy() %>%
+        transmute(variable = v, p_value = p.value)
+    }) %>% bind_rows()
+    
+    p_cat <- lapply(cat_vars, function(v) {
+      chisq.test(table(df_summary[[v]], df_summary$depression_incident)) %>%
+        tidy() %>%
+        transmute(variable = v, p_value = p.value)
+    }) %>% bind_rows()
+    
+    pvals <- bind_rows(p_cont, p_cat) %>%
+      mutate(variable = ifelse(variable == "smokingstatus", "smoking", variable))
+    
+    # ---- Final table with p-values ----
+    final_tbl <- summary_tbl %>%
+      left_join(pvals, by = "variable")%>%
+      select(-variable)
+    
+    #cat("Depression\n")
+    print(final_tbl)
+    
+    rm(df_summary)
+    rm(cat_vars)
+    rm(cont_vars)
+    rm(p_cont)
+    rm(p_cat)
+    rm(summary_tbl)
+    rm(pvals)
+    #rm(final_tbl)
+
+
+# 9. Check continuous covariate density by incident diagnosis status
+
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = bmi, fill = factor(depression_incident))) +
+    geom_density(alpha = 0.4) +
+    labs(x = "BMI", y = "Density", fill = "Incident depression") +
+    theme_minimal()
+            
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = age, fill = factor(depression_incident))) +
+    geom_density(alpha = 0.4) +
+    labs(x = "age", y = "Density", fill = "Incident depression") +
+    theme_minimal()
+            
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = tdi, fill = factor(depression_incident))) +
+    geom_density(alpha = 0.4) +
+    labs(x = "tdi", y = "Density", fill = "Incident depression") +
+    theme_minimal()
+
+# 10. Check linearity - smoothed curves between continuous covariates and proportion of incident cases
+
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = bmi, y = depression_incident)) +
+    geom_smooth(method = "loess", se = TRUE, color = "steelblue") +
+    labs(x = "BMI", y = "Incident depression (0/1)", 
+    title = "Smoothed relationship between BMI and incident depression") +
+    theme_minimal()
+            
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = age, y = depression_incident)) +
+    geom_smooth(method = "loess", se = TRUE, color = "steelblue") +
+    labs(x = "age", y = "Incident depression (0/1)", 
+    title = "Smoothed relationship between age and incident depression") +
+    theme_minimal()
+            
+    df %>% 
+    filter(depression_prevalent == 0) %>%
+    ggplot(aes(x = tdi, y = depression_incident)) +
+    geom_smooth(method = "loess", se = TRUE, color = "steelblue") +
+    labs(x = "TDI", y = "Incident depression (0/1)", 
+    title = "Smoothed relationship between TDI and incident depression") +
+    theme_minimal()
+        
+        
+
+# Part 1 - Discussion & Questions
+# 
+# Why separate prevalent and incident cases, and what biases can affect prevalent cases?
+# 
+# Why adjust for covariates in modelling, and what are the risks of over- or under-adjustment?
+# 
+# Which additional covariates might be important when studying protein–disease associations?
+#      
+# How can you identify whether a variable is a confounder, mediator, or collider?
+# 
+# How could protein measurement error or detection thresholds influence results?
+# 
+# What other exploratory checks could be done before modelling associations?
+# 
+# How would you handle missing data in proteins or covariates?
+
+     
+# Part 2 - Modelling univariable associations
+# 
+# 1. Diagnosis-covariate univariable relationships
+
+    depression_uni_cox <- lapply(c("age", "bmi", "tdi", "sex", "smokingstatus"), function(var) {
+    formula <- as.formula(paste("Surv(depression_ttd, depression_incident) ~", var))
+    coxph(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%  # HR + 95% CI
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = var)
+    }) %>% bind_rows()%>%
+    dplyr::select(covariate, term, estimate, conf.low, conf.high)
+            
+    ggplot(depression_uni_cox, aes(x = factor(term, levels = rev(unique(term))), y = estimate, ymin = conf.low, ymax = conf.high)) +
+    geom_pointrange(color = "steelblue") +
+    geom_hline(yintercept = 1, linetype = 2) +  # reference line
+    coord_flip() +
+    labs(y = "Hazard Ratio (95% CI)", x = "", title = "Univariable Cox models for incident depression") +
+    theme_minimal()
+    
+    rm(depression_uni_cox)
+
+# 2. Diagnosis-covariate univariable relationships with spline transformation
+
+    depression_uni_cox <- list(
+      
+    coxph(Surv(depression_ttd, depression_incident) ~ lspline(age, 60),
+    data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = "age"),
+              
+    lapply(c("bmi", "tdi", "sex", "smokingstatus"), function(var) {
+    formula <- as.formula(paste("Surv(depression_ttd, depression_incident) ~", var))
+    coxph(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = var)
+    }) %>% bind_rows()
+    ) %>%
+    bind_rows() %>%
+    dplyr::select(covariate, term, estimate, conf.low, conf.high)
+            
+            
+    ggplot(depression_uni_cox, aes(x = factor(term, levels = rev(unique(term))), y = estimate, ymin = conf.low, ymax = conf.high)) +
+    geom_pointrange(color = "steelblue") +
+    geom_hline(yintercept = 1, linetype = 2) +  # reference line
+    coord_flip() +
+    labs(y = "Hazard Ratio (95% CI)", x = "", title = "Univariable Cox models for incident depression") +
+    theme_minimal()
+                   
+    rm(depression_uni_cox)
+
+# 3. Formally compare models with and without spline transformation
+     
+    # Simple linear age model
+    cox_linear <- coxph(Surv(depression_ttd, depression_incident) ~ age, 
+                        data = df %>% filter(depression_prevalent == 0))
+            
+    # Linear spline with one knot at 60
+    cox_spline <- coxph(Surv(depression_ttd, depression_incident) ~ lspline(age, 60), 
+                        data = df %>% filter(depression_prevalent == 0))
+    
+    # Likelihood ratio test
+    anova(cox_linear, cox_spline, test = "LRT")
+    
+    
+    #Explained variance - Nagelkerke R²
+    nagelkerke_r2 <- function(model, n) {
+    LL_full <- model$loglik[2]   # log-likelihood of fitted model
+    LL_null <- model$loglik[1]   # log-likelihood of null model
+    R2_cs <- 1 - exp(-(2/n) * (LL_full - LL_null))  # Cox-Snell R²
+    R2_n <- R2_cs / (1 - exp((2/n) * LL_null))      # Nagelkerke adjustment
+    return(R2_n)
+    }
+    
+    print ("Nagelkerke R2")
+    nagelkerke_r2(cox_linear, nrow(df %>% filter(depression_prevalent == 0)))
+    nagelkerke_r2(cox_spline, nrow(df %>% filter(depression_prevalent == 0)))
+    
+    # AIC        
+    #print (AIC(cox_linear, cox_spline))
+    
+    rm(cox_linear)
+    rm(cox_spline)
+    rm(nagelkerke_r2)
+
+
+# 4. Protein-covariate univariable relationships
+# 
+# Two examples (proteins) of fitting linear regression between proteins levels and other covariates
+    
+# ACAN - Aggrecan core protein - This proteoglycan is a major component of extracellular matrix of cartilagenous tissues. 
+# A major function of this protein is to resist compression in cartilage. 
+# It binds avidly to hyaluronic acid via an N-terminal globular region.
+    
+    #acan
+    protein_acan<- lapply(c("age", "bmi", "tdi", "sex", "smokingstatus"), function(var) {
+    formula <- as.formula(paste("acan ~", var))
+    glm(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = FALSE, conf.int = TRUE) %>% 
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = var)
+    }) %>% bind_rows()%>%
+    dplyr::select(covariate, term, estimate, conf.low, conf.high) 
+            
+    ggplot(protein_acan, aes(x = factor(term, levels = rev(unique(term))), y = estimate, ymin = conf.low, ymax = conf.high)) +
+    geom_pointrange(color = "steelblue") +
+    geom_hline(yintercept = 0, linetype = 2) +  # reference line
+    coord_flip() +
+    labs(y = "Estimate(95% CI)", x = "", title = "Univariable linear models for protein acan") +
+    theme_minimal()
+    
+    rm(protein_acan)
+
+# ACOX1 - Peroxisomal acyl-coenzyme A oxidase 1 - Involved in the initial and rate-limiting step of 
+# peroxisomal beta-oxidation of straight-chain saturated and unsaturated very-long-chain fatty acids
+
+    #acox1
+    protein_acox1<- lapply(c("age", "bmi", "tdi", "sex", "smokingstatus"), function(var) {
+    formula <- as.formula(paste("acox1 ~", var))
+    glm(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = FALSE, conf.int = TRUE) %>%  
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = var)
+    }) %>% bind_rows()%>%
+    dplyr::select(covariate, term, estimate, conf.low, conf.high) 
+            
+    ggplot(protein_acox1, aes(x = factor(term, levels = rev(unique(term))), y = estimate, ymin = conf.low, ymax = conf.high)) +
+    geom_pointrange(color = "steelblue") +
+    geom_hline(yintercept = 0, linetype = 2) +  # reference line
+    coord_flip() +
+    labs(y = "Hazard Ratio (95% CI)", x = "", title = "Univariable linear models for protein acox1") +
+    theme_minimal()
+    
+    rm(protein_acox1)
+
+
+# 5. Protein-diagnosis univariable relationships
+# 
+# Sample of 20 proteins only, since we have 366 proteins different visualisation is needed (see next part).
+
+    proteins <- colnames(df[,13:33])
+            
+    depression_uni_cox <- lapply(proteins, function(var) {
+    formula <- as.formula(paste("Surv(depression_ttd, depression_incident) ~", var))
+    coxph(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%  # HR + 95% CI
+    filter(term != "(Intercept)") %>%
+    mutate(covariate = var)
+    }) %>% bind_rows()%>%
+    dplyr::select(covariate, term, estimate, conf.low, conf.high)
+            
+            
+    ggplot(depression_uni_cox, aes(x = factor(term, levels = rev(unique(term))), y = estimate, ymin = conf.low, ymax = conf.high)) +
+    geom_pointrange(color = "steelblue") +
+    geom_hline(yintercept = 1, linetype = 2) +  # reference line
+    coord_flip() +
+    labs(y = "Hazard Ratio (95% CI)", x = "", title = "Univariable Cox models for incident depression") +
+    theme_minimal()
+            
+    rm(depression_uni_cox)
+    rm(proteins)
+
+
+# Part 2 - Discussion & Questions
+# 
+# Why examine univariable associations before building multivariable models?
+# 
+# When is it useful to transform a variable (e.g. splines, categories)?
+# 
+# What factors beyond statistical fit should guide your choice of variables and transformations?
+
+
+    
+# Part 3 - Modelling multivariable associations
+    
+    # We selected two incremental levels of covariate adjustment to illustrate how such adjustments influence protein–outcome associations. 
+    # 
+    # While adjusting for confounding covariates can increase the likelihood of identifying causal relationships, 
+    # it is important to ensure that these covariates are not mediators or colliders, as including them could distort the observed associations.
+    # 
+    # A confounder is a variable that influences both the protein and the outcome, potentially creating a spurious association if not adjusted for. 
+    # 
+    # A mediator lies on the causal pathway between the protein and the outcome, so adjusting for it can obscure true effects. 
+    # 
+    # A collider is influenced by both the protein and the outcome, and adjusting for it can induce artificial associations that do not exist in the unadjusted data.
+    # 
+    # There are a few additional points to keep in mind when adjusting for covariates in protein–outcome analyses, 
+    # such as overadjustment that can reduce statistical power and increase standard errors, making real associations harder to detect, 
+    # measurement error in covariates that can introduce bias, multicollinearity (highly correlated covariates) 
+    # that can make effect estimates unstable and difficult to interpret.
+# 
+# 1. Protein-diagnosis associations - minimally adjusted models
+# 
+# Minimal adjustment = age + sex
+# 
+# This will take a few minutes to run!!!
+
+    proteins <- 13:378
+    
+    protein_depression_adj1 <- lapply(proteins, function(i) {
+    protein_name <- colnames(df %>% filter(depression_prevalent == 0))[i]
+              
+    print(i)
+    print(protein_name)
+              
+    formula <- as.formula(paste("Surv(depression_ttd, depression_incident) ~", protein_name, "+ age + sex"))
+    
+    coxph(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+    broom::tidy(conf.int = TRUE, exponentiate = FALSE) %>%  # do NOT exponentiate
+    filter(term == protein_name) %>%  # only keep protein term
+    dplyr::select(term, estimate, conf.low, conf.high, p.value)
+    
+    }) %>% bind_rows()
+
+
+#If the above code doesn't run or takes too long, just uncomment the line below and load the dataset into your environment.
+
+    #load("associations/protein_depression_adj1.RData")
+    
+
+# Apply horizontal thresholds to account for multiple testing (false discovery rate)
+# 
+# 1. Bonferroni adjustment - number of models (proteins) x number of outcomes, in this case 366 proteins tested and 1 outcome
+# 
+# 2. FDR adjustment (adjusted p values below 0.05, 0.01 and 0.001)
+    
+    proteins <- 13:378
+    
+    #bonferroni
+    protein_depression_adj1 <- protein_depression_adj1 %>%
+      mutate(sign_bonferroni = ifelse(p.value < (0.05 / (length(proteins) )), 1, 0))
+    
+    #fdr
+    protein_depression_adj1 <- protein_depression_adj1 %>%
+      mutate(
+        p.value_fdr = p.adjust(p.value, method = "fdr"),
+        sign_fdr_05 = ifelse(p.value_fdr < 0.05, 1, 0),
+        sign_fdr_01 = ifelse(p.value_fdr < 0.01, 1, 0),
+        sign_fdr_001 = ifelse(p.value_fdr < 0.001, 1, 0)
+      )
+    
+    cat("\nMinimally adjusted models for incident depression\n")
+    
+    cat("\n-----Bonferroni\n")
+    table(protein_depression_adj1$sign_bonferroni)
+    
+    cat("\n-----FDR < 0.05\n")
+    table(protein_depression_adj1$sign_fdr_05)
+    
+    cat("\n-----FDR < 0.01\n") 
+    table(protein_depression_adj1$sign_fdr_01)
+    
+    cat("\n-----FDR < 0.001\n")    
+    table(protein_depression_adj1$sign_fdr_001)
+    
+    
+# 2. Protein-diagnosis associations - fully adjusted models
+#     
+# Full adjustment = age + sex + bmi + tdi + smokingstatus
+#     
+# This will take a few minutes to run!!!
+
+    proteins <- 13:378
+
+    protein_depression_adj2 <- lapply(proteins, function(i) {
+      protein_name <- colnames(df %>% filter(depression_prevalent == 0))[i]
+      
+      print(i)
+      print(protein_name)
+      
+      formula <- as.formula(paste("Surv(depression_ttd, depression_incident) ~", protein_name, "+ age + sex + tdi + bmi + smokingstatus"))
+      
+      coxph(formula, data = df %>% filter(depression_prevalent == 0)) %>%
+        broom::tidy(conf.int = TRUE, exponentiate = FALSE) %>%  # do NOT exponentiate
+        filter(term == protein_name) %>%  # only keep protein term
+        dplyr::select(term, estimate, conf.low, conf.high, p.value)
+      
+    }) %>% bind_rows()
+
+    
+#If the above code doesn't run or takes too long, just uncomment the line below and load the dataset into your environment.
+    
+    #load("associations/protein_depression_adj2.RData")
+    
+    
+# Apply horizontal thresholds to account for multiple testing (false discovery rate)
+# 
+# 1. Bonferroni adjustment - number of models (proteins) x number of outcomes, in this case 366 proteins tested and 1 outcome
+# 
+# 2. FDR adjustment (adjusted p values below 0.05, 0.01, and 0.001)
+
+    
+    proteins <- 13:378
+    
+    #bonferroni
+    protein_depression_adj2 <- protein_depression_adj2 %>%
+      mutate(sign_bonferroni = ifelse(p.value < (0.05 / (length(proteins) )), 1, 0))
+    
+    #fdr
+    protein_depression_adj2 <- protein_depression_adj2 %>%
+      mutate(
+        p.value_fdr = p.adjust(p.value, method = "fdr"),
+        sign_fdr_05 = ifelse(p.value_fdr < 0.05, 1, 0),
+        sign_fdr_01 = ifelse(p.value_fdr < 0.01, 1, 0),
+        sign_fdr_001 = ifelse(p.value_fdr < 0.001, 1, 0)
+      )
+    
+    cat("\nFully adjusted models for incident depression\n")
+    
+    cat("\n-----Bonferroni\n")      
+    table(protein_depression_adj2$sign_bonferroni)
+    
+    cat("\n-----FDR < 0.05\n") 
+    table(protein_depression_adj2$sign_fdr_05)
+    
+    cat("\n-----FDR < 0.01\n") 
+    table(protein_depression_adj2$sign_fdr_01)
+    
+    cat("\n-----FDR < 0.001\n")  
+    table(protein_depression_adj2$sign_fdr_001)
+
+# 3. Volcano plots - minimally and fully adjusted models
+
+    # Basic volcano plot - minimal
+    proteins <- 13:378
+    
+    bonf_threshold <- -log10(0.05 / (length(proteins) ))
+    fdr_threshold05 <- -log10(min(protein_depression_adj1$p.value[protein_depression_adj1$sign_fdr_05 == FALSE], na.rm = TRUE))
+    fdr_threshold01 <- -log10(min(protein_depression_adj1$p.value[protein_depression_adj1$sign_fdr_01 == FALSE], na.rm = TRUE))
+    fdr_threshold001 <- -log10(min(protein_depression_adj1$p.value[protein_depression_adj1$sign_fdr_001 == FALSE], na.rm = TRUE))
+    
+    p1<-ggplot(protein_depression_adj1, aes(x = estimate, y = -log10(p.value))) +
+      geom_point(aes(color = factor(sign_bonferroni)), alpha = 0.6) +  # color by significance
+      scale_color_manual(values = c("0" = "black", "1" = "red"), labels = c("Not significant", "Significant")) +
+      labs(
+        x = "Protein effect estimate (logHR)",
+        y = "-log10(pvalue)",
+        color = "Bonferroni"
+      ) +
+      ggtitle("Incident depression\nMinimally adjusted models") +
+      ylim(0, 15) + 
+      xlim(-1, 1.5) +  
+      theme_minimal() +
+      geom_hline(yintercept = bonf_threshold, linetype = "dashed", color = "red") +
+      annotate("text", x = 1.5, y = bonf_threshold + 0.5, label = "Bonferroni",
+               hjust = 1, size = 3, color = "red")+
+      
+      geom_hline(yintercept = fdr_threshold05, linetype = "dashed", color = "blue") +
+      annotate("text", x = 1.5, y = fdr_threshold05 - 0.5, label = "FDR<0.05",
+               hjust = 1, size = 3, color = "blue") +
+      
+      # geom_hline(yintercept = fdr_threshold01, linetype = "dashed", color = "darkgreen") +
+      # annotate("text", x = 1.5, y = fdr_threshold01 - 0.5, label = "FDR<0.01",
+      #          hjust = 1, size = 3, color = "darkgreen")+
+      theme(
+        legend.position = c(0.25, 0.8),  # inside top-right
+        legend.background = element_rect(fill = alpha("white", 0.1))  # slightly transparent
+      )
+    
+    # Basic volcano plot - full
+    
+    bonf_threshold <- -log10(0.05 / (length(proteins) ))
+    fdr_threshold05 <- -log10(min(protein_depression_adj2$p.value[protein_depression_adj2$sign_fdr_05 == FALSE], na.rm = TRUE))
+    fdr_threshold01 <- -log10(min(protein_depression_adj2$p.value[protein_depression_adj2$sign_fdr_01 == FALSE], na.rm = TRUE))
+    fdr_threshold001 <- -log10(min(protein_depression_adj2$p.value[protein_depression_adj2$sign_fdr_001 == FALSE], na.rm = TRUE))
+    
+    p2<-ggplot(protein_depression_adj2, aes(x = estimate, y = -log10(p.value))) +
+      geom_point(aes(color = factor(sign_bonferroni)), alpha = 0.6) +  # color by significance
+      scale_color_manual(values = c("0" = "black", "1" = "red"), labels = c("Not significant", "Significant")) +
+      labs(
+        x = "Protein effect estimate (logHR)",
+        y = "-log10(pvalue)",
+        color = "Bonferroni"
+      ) +
+      ggtitle("Incident depression\nFully adjusted models") +
+      ylim(0, 15) + 
+      xlim(-1, 1.5) +  
+      theme_minimal() +
+      geom_hline(yintercept = bonf_threshold, linetype = "dashed", color = "red") +
+      annotate("text", x = 1.5, y = bonf_threshold + 0.5, label = "Bonferroni",
+               hjust = 1, size = 3, color = "red")+
+      
+      geom_hline(yintercept = fdr_threshold05, linetype = "dashed", color = "blue") +
+      annotate("text", x = 1.5, y = fdr_threshold05 - 0.5, label = "FDR<0.05",
+               hjust = 1, size = 3, color = "blue") +
+      
+      # geom_hline(yintercept = fdr_threshold01, linetype = "dashed", color = "darkgreen") +
+      # annotate("text", x = 1.5, y = fdr_threshold01 - 0.5, label = "FDR<0.01",
+      #          hjust = 1, size = 3, color = "darkgreen") +
+      theme(
+        legend.position = c(0.25, 0.8),  # inside top-right
+        legend.background = element_rect(fill = alpha("white", 0.1))  # slightly transparent
+      )
+    
+    
+    
+    p1 | p2 
+    
+    #clean up intermediate objects and cache
+    rm (p1)
+    rm (p2)
+    rm (bonf_threshold)
+    rm (fdr_threshold05)
+    rm (fdr_threshold01)
+    rm (fdr_threshold001)
+    gc ()
+
+
+# 4. What are these proteins?
+#   
+# Print out your protein names that pass Bonferroni threshold.
+# 
+# For detailed information on human proteins and their functions, there are several databases you can use to explore further:
+#   
+# UniProt – https://www.uniprot.org
+# 
+# Comprehensive resource for protein sequences, structure, function, post-translational modifications, and interactions. 
+# Searchable by protein name, gene, or accession number, with links to literature and other databases.
+# 
+# Human Protein Atlas – https://www.proteinatlas.org
+# 
+# Focused on tissue- and cell-specific protein expression. Useful for studying protein relevance in specific tissues.
+# 
+# Reactome – https://reactome.org
+# 
+# Curated pathways and interactions. Useful for mapping proteins to biological pathways and functional networks.
+# 
+# STRING Database – https://string-db.org
+# 
+# Database of known and predicted protein–protein interactions (PPI). Useful for network analysis, 
+# and exploring functional relationships between proteins.
+# 
+# There are several R packages available for PPI and enrichment analyses and visualisations, 
+# e.g. "BiocManager", "STRINGdb", "clusterProfiler", "org.Hs.eg.db", "enrichplot", "pathview", "enrichR", "igraph".
+
+    cat ("\n Minimally adjusted models - Bonferroni \n")
+    protein_depression_adj1 %>% 
+      filter(sign_bonferroni == 1) %>% 
+      pull(term)
+    
+    cat ("\n Fully adjusted models - Bonferroni \n")
+    protein_depression_adj2 %>% 
+      filter(sign_bonferroni == 1) %>% 
+      pull(term)
+    
+    cat ("\n Minimally adjusted models - FDR<0.05 \n")
+    protein_depression_adj1 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term)
+    
+    cat ("\n Fully adjusted models - FDR<0.05 \n")
+    protein_depression_adj2 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term)
+    
+    #head (protein_depression_adj1 %>%  filter (sign_bonferroni == 1))
+    #head (protein_depression_adj2 %>%  filter (sign_bonferroni == 1))
+
+
+# Part 3 - Discussion & Questions
+# 
+# How do covariates like BMI, TDI, and smoking affect protein–incident depression associations?
+#   
+# How would you decide on statistical significance thresholds?
+#   
+# Would it be useful to filter results by effect size too?
+#   
+# What sensitivity analyses would you consider to test the robustness of your findings?
+#   
+# After identifying significant proteins, what post-hoc approaches could you use to explore their biological relevance?
+  
+
+## Part 4 - Additional & sensitivity analyses (optional)
+    
+### 1. Incremental follow-up
+    
+# To explore time dependencies between protein measurement and incident depression diagnosis, 
+# fit separate Cox models for distinct follow-up intervals instead of cumulative follow-up.
+#     
+# That means for each period, you only include events that occur within that interval and censor everyone else at the interval end.
+#     
+# Let's investigate association between protein "gdf15" levels and incident depression at two year intervals fully adjusting for all covariates.
+# 
+# **GDF15 - Growth/differentiation factor 15 -** Hormone produced in response to various stresses to confer information about those stresses to the brain, 
+# and trigger an aversive response, characterized by nausea, vomiting, and/or loss of appetite
+# 
+# **EPHB4 - Ephrin type-B receptor 4 -** Receptor tyrosine kinase which binds promiscuously transmembrane ephrin-B family ligands residing on adjacent cells, 
+# leading to contact-dependent bidirectional signaling into neighboring cells. Together with its cognate ligand/functional ligand EFNB2 it is involved in 
+# the regulation of cell adhesion and migration, and plays a central role in heart morphogenesis, angiogenesis and blood vessel remodeling and permeability.
+# 
+# **TFF3 - Trefoil factor 3 -** Involved in the maintenance and repair of the intestinal mucosa. 
+# Promotes the mobility of epithelial cells in healing processes (motogen).
+# 
+# **COL6A3 - Collagen alpha-3(VI) chain -** Collagen VI acts as a cell-binding protein.
+
+
+    #proteins passing bonferroni threshold in fully adjusted models
+    #"col6a3" "ephb4"  "gdf15"  "tff3" 
+    
+    # Define distinct follow-up intervals in years
+    intervals <- data.frame(
+      start = seq(0, 14, by = 2),
+      end = seq(2, 16, by = 2)
+    )
+    intervals$start_days <- intervals$start * 365.25
+    intervals$end_days <- intervals$end * 365.25
+    
+    # Fit Cox models in each interval
+    model <- lapply(1:nrow(intervals), function(i) {
+    
+    start <- intervals$start_days[i]
+    end <- intervals$end_days[i]
+      
+    df_interval <- df %>% filter(depression_prevalent == 0) %>%
+    mutate(
+    depression_ttd_interval = pmin(pmax(depression_ttd - start, 0), end - start),
+    depression_incident_interval = ifelse(depression_ttd > start & depression_ttd <= end, 1, 0)
+    ) %>%
+    filter(depression_ttd > start)
+      
+    coxph(Surv(depression_ttd_interval, depression_incident_interval) ~ gdf15 + age + sex + bmi + tdi + smokingstatus,
+    data = df_interval) %>%
+    broom::tidy(conf.int = TRUE, exponentiate = FALSE) %>%
+    filter(term == "gdf15") %>%
+    mutate(interval_label = paste0(i, " (", intervals$start[i], "-", intervals$end[i], "y)"))
+    }) %>% bind_rows()
+    
+    # Plot
+    p1<-ggplot(model, aes(x = interval_label, y = estimate)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+    labs(x = "Follow-up interval (years)", y = "Protein effect estimate (logHR)",
+    title = "Protein-depression association across distinct intervals"
+    ) +
+    theme_minimal()
+    
+    p1
+    
+    rm(p1)
+    rm(intervals)
+    rm(model)
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# 
+# ***Questions:***
+# 
+# What can changes in hazard ratios across follow-up periods tell us? If associations weaken, or persist over time, how should we interpret that?
+# 
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+### 2. Comparing incident and prevalent cases
+
+#Here we will explore common and distinct proteins between incident and prevalent cases of depression using **minimally adjusted models and FDR \< 0.05 threshold.
+
+
+    load("associations/protein_depression_prev_adj1.RData")
+    
+    # Create a list of protein sets
+    protein_list <- list(
+      
+    Depression_incident = protein_depression_adj1 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term),
+    
+    Depression_prevalent = protein_depression_prev_adj1 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term)
+    
+    )
+    
+    # Make upset plot
+    upset(fromList(protein_list), 
+          order.by = "freq",
+          mb.ratio = c(0.6, 0.4), 
+          main.bar.color = "steelblue",
+    )
+
+    rm(protein_list)
+
+
+#We will also plot correlation between effect sizes for incident and prevalent depression in these models.
+
+    # Select significant proteins from either dataset
+    merged <- protein_depression_adj1 %>%
+      select(term, estimate1 = estimate, sign1 = sign_fdr_05) %>%
+      inner_join(
+        protein_depression_prev_adj1 %>%
+          select(term, estimate2 = estimate, sign2 = sign_fdr_05),
+        by = "term"
+      ) %>%
+      filter(sign1 == 1 | sign2 == 1)
+    
+    # Scatter plot comparing estimates
+    ggplot(merged, aes(x = estimate1, y = estimate2, label = term)) +
+      geom_point(aes(colour = interaction(sign1, sign2)), size = 1) +
+      geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+      geom_hline(yintercept = 0, size = 0.1) +  # horizontal line at y = 0
+      geom_vline(xintercept = 0, size = 0.1) +   # vertical line at x = 0 +
+      geom_smooth(aes(colour = interaction(sign1, sign2), group = interaction(sign1, sign2)),
+                  method = "lm", se = FALSE, size = 0.5) +
+      #geom_text(hjust = 1.2, vjust = 0, size = 1) +
+      scale_colour_manual(values = c("1.1" = "blue", 
+                                     "1.0" = "red", 
+                                     "0.1" = "darkorange"),
+                          labels = c("1.1" = "Both",
+                                     "1.0" = "Depression incident only",
+                                     "0.1" = "Depression prevalent only"),
+                          name = "Significance") + 
+      labs(x = "log(HR) – Depression incident, minadj, FDR<0.05 ", 
+           y = "log(HR) – Depression prevalent, minadj, FDR<0.05") +
+      xlim(-1, 1) + 
+      ylim(-1, 1) + 
+      theme_minimal()
+    
+    rm(merged)
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# 
+# ***Questions:***
+# 
+# When proteins appear in both incident and prevalent cases, what might this mean? How would you interpret proteins linked only to prevalent cases? 
+# If a protein is linked only to incident cases, does that make it a stronger candidate for a causal risk factor?
+# 
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+### 3. Comparing incident depression and anxiety
+
+#Here we will explore common and distinct proteins between incident depression and anxiety using **minimally adjusted models and FDR \< 0.05** **threshold**.
+
+    load("associations/protein_anxiety_adj1.RData")
+    
+    # Create a list of protein sets
+    protein_list <- list(
+      
+    Depression_incident = protein_depression_adj1 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term),
+    
+    Anxiety_incident = protein_anxiety_adj1 %>% 
+      filter(sign_fdr_05 == 1) %>% 
+      pull(term)
+    
+    )
+    
+      upset(fromList(protein_list), 
+            order.by = "freq",
+            mb.ratio = c(0.6, 0.4), 
+            main.bar.color = "steelblue")
+    
+    rm(protein_list)
+
+
+# We will also plot correlation between effect sizes for incident anxiety and depression in these models.
+
+    # Select significant proteins from either dataset
+    merged <- protein_depression_adj1 %>%
+      select(term, estimate1 = estimate, sign1 = sign_fdr_05) %>%
+      inner_join(
+        protein_anxiety_adj1 %>%
+          select(term, estimate2 = estimate, sign2 = sign_fdr_05),
+        by = "term"
+      ) %>%
+      filter(sign1 == 1 | sign2 == 1)
+    
+    # Scatter plot comparing estimates
+    ggplot(merged, aes(x = estimate1, y = estimate2, label = term)) +
+      geom_point(aes(colour = interaction(sign1, sign2)), size = 1) +
+      geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+      geom_hline(yintercept = 0, size = 0.1) +  # horizontal line at y = 0
+      geom_vline(xintercept = 0, size = 0.1) +   # vertical line at x = 0 +
+      geom_smooth(aes(colour = interaction(sign1, sign2), group = interaction(sign1, sign2)), method = "lm", se = FALSE, size = 0.5) + 
+      scale_colour_manual(values = c("1.1" = "red", 
+                                     "1.0" = "blue", 
+                                     "0.1" = "darkorange"),
+                          labels = c("1.1" = "Both",
+                                     "1.0" = "Depression only",
+                                     "0.1" = "Anxiety only"),
+                          name = "Significance") + 
+      labs(x = "log(HR) – Depression, minadj, FDR<0.05 ", 
+           y = "log(HR) – Anxiety, minadj, FDR<0.05") +
+       xlim(-1, 1) + 
+       ylim(-1, 1) + 
+      theme_minimal()
+    
+    rm(merged)
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# 
+# ***Questions:***
+# 
+# Many psychiatric conditions are comorbid and potentially share biological pathways. 
+# Can overlapping proteins teach us about shared mechanisms, and are disorder-specific proteins more informative for understanding unique disease biology?
+# 
+# How do we best approach proteomics analyses when multiple outcomes are of interest? 
+# What strategies can be considered to deal with psychiatric and other clinical comorbidities?
+# 
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+# ## Summary and next steps
+# 
+# We explored associations between proteins and psychiatric diagnoses across four parts: descriptive characterisation, 
+# univariable and multivariable modelling (incl. visualisation of protein–outcome relationships), and additional sensitivity analyses.
+# 
+# The most relevant next steps will depend on your research goals, whether identifying causal proteins, 
+# druggable targets, risk stratification tools, diagnostic tests, or understanding of disease biology. These may include
+# 
+# -   Polygenic analyses such as Mendelian randomisation and colocalisation.
+# 
+# -   Prediction modelling and variable importance by explained variance.
+# 
+# -   Post-hoc analyses like pathway enrichment and protein–protein interaction.
+# 
+# Triangulating evidence across multiple methods, together with systematic appraisal and marker prioritisation, helps to identify the most robust signals.
+  
+  
