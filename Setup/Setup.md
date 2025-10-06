@@ -25,7 +25,7 @@ In this page, scroll down and you will find two links for R and RStudio
 respectively. Download and install the latest versions of both following
 the prompts.
 
-![alt text](image.png)
+![alt text](R_installation.png)
 
 ## Install R packages
 
