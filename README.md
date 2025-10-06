@@ -18,15 +18,15 @@ Access slides from this [URL](https://drive.google.com/drive/folders/1TNdcmP4R9R
 
 We recommend you to use Posit Cloud (for Session I) and Google Colab (for Session II). 
 
--   Setup your Posit Cloud account and make your own copy of the R project for Session I (recommended). Follow instructions [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_i/Setup_posit_cloud.md).
+-   Setup your Posit Cloud account and make your own copy of the R project for Session I (recommended). Follow instructions [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup/Setup_posit_cloud.md).
 
 -   Setup your Google Colab account (recommended) for Session II: click [here](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). Follow the prompts to sign up a Google account and log in.
 
--   Setup your local environment (optional, in your own time): click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup.md)
+-   Setup your local environment (optional, in your own time): click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup/Setup.md)
 
 ## Readings
 
-Optional readings are listed [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Reading.md)
+Recommended and optional readings are listed [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Reading.md)
 
 ## Practical tutorial
 
@@ -36,7 +36,7 @@ Optional readings are listed [here](https://github.com/xshen796/Proteomics_Works
 
 -   Access project online via Posit Cloud: [URL](https://posit.cloud/content/10981075)
 
--   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_i)
+-   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_i) following steps listed [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_i/proteomics_practical_1.Rmd).
 
 
 ### Session II
@@ -45,5 +45,5 @@ Optional readings are listed [here](https://github.com/xshen796/Proteomics_Works
 
 -   Access project online via Google Colab: [URL](https://colab.research.google.com/drive/1sRXf0Myh2DL0XDieCVjO6NT2-61DzcMI?usp=sharing). We will follow the paper by Bhattacharyya et al. published in JAMA Psychiatry, 2025.
 
--   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_ii)
+-   Optional (explore in your own time): all scripts for Session I available in this [URL](https://github.com/xshen796/Proteomics_Workshop_Practical/tree/main/Session_ii) following steps listed [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Session_ii/FOLH1_Bipolar_practical.md).
 
