@@ -27,7 +27,7 @@ body {
 <body>
 
 <h1 id="mq-datamind-ecr-workshop-proteomics-and-mental-health-environment-set-up">MQ-DATAMIND ECR workshop: Proteomics and Mental Health (environment set up)</h1>
-<p>X Shen 05 October, 2025</p>
+<p>X Shen 06 October, 2025</p>
 <p>Welcome! This tutorial guides through the main steps to set up your local environment for the MQ-DATAMIND ECR workshop, ‘Proteomics and Mental health’.</p>
 <h2 id="introduction">Introduction</h2>
 <p>All scripts are written in R. You can choose to run the practical on a jupyter notebook provided to you and run the analysis on Google Cloud, or you could download scripts to your local computer or cluster and perform analysis on your own device. This Setup tutorial shows you steps to set up or local environment.</p>
@@ -81,10 +81,22 @@ body {
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;GenomicsFeatures&quot;</span>)</span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;rtracklayer&quot;</span>)</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;rtracklayer&quot;</span>)</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;GenomicAlignments&quot;</span>)</span></code></pre></div>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;rmarkdown&quot;</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;Hmisc&quot;</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;stringr&quot;</span>)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;tidyr&quot;</span>)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;survival&quot;</span>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;broom&quot;</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;lspline&quot;</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="fu">check_and_install_package</span>(<span class="st">&quot;UpSetR&quot;</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;rtracklayer&quot;</span>)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;GenomicAlignments&quot;</span>)</span></code></pre></div>
 <p>The code should be able to check if you have installed the packages correctly. Contact Xueyi Shen (<a href="mailto:xueyi.shen@ed.ac.uk">xueyi.shen@ed.ac.uk</a>) if you run into any issue.</p>
 <h2 id="optional-packages-for-visualisation">Optional packages for visualisation</h2>
 <p>Use code below to install some optional packages for visualisation. These packages are used to visualise some of the results in the tutorial and won’t effect the analysis.</p>

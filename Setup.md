@@ -2,7 +2,7 @@ MQ-DATAMIND ECR workshop: Proteomics and Mental Health (environment set
 up)
 ================
 X Shen
-05 October, 2025
+06 October, 2025
 
 Welcome! This tutorial guides through the main steps to set up your
 local environment for the MQ-DATAMIND ECR workshop, ‘Proteomics and
@@ -75,6 +75,18 @@ check_and_install_package("TwoSampleMR")
 check_and_install_package("coloc")
 check_and_install_package("GenomicsFeatures")
 check_and_install_package("rtracklayer")
+
+check_and_install_package("rmarkdown")
+check_and_install_package("Hmisc")
+check_and_install_package("dplyr")
+check_and_install_package("stringr")
+check_and_install_package("tidyr")
+check_and_install_package("ggplot2")
+check_and_install_package("survival")
+check_and_install_package("broom")
+check_and_install_package("lspline")
+check_and_install_package("patchwork")
+check_and_install_package("UpSetR")
 
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
