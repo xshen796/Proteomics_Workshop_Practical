@@ -24,6 +24,10 @@ We recommend you to use Posit Cloud (for Session I) and Google Colab (for Sessio
 
 -   Setup your local environment (optional, in your own time): click [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Setup.md)
 
+## Readings
+
+Optional readings are listed [here](https://github.com/xshen796/Proteomics_Workshop_Practical/blob/main/Reading.md)
+
 ## Practical tutorial
 
 ### Session I
